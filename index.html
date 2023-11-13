@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="./tripaint.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="CS465 Assignment 1"
+    />
+    <title>Octopus - CS465 Assignment 2</title>
+    <link rel = "icon" href = "./icons/icons8-triangle-100.png" type = "image/x-icon"> 
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      attribute vec4 vPosition;
+      attribute vec4 vColor;
+      uniform mat4 viewMatrix;
+
+      varying vec4 fColor;
+      void main() {
+        gl_Position = viewMatrix * vPosition;
+        fColor = vColor;
+      }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      varying vec4 fColor;
+      void main() {
+        gl_FragColor = fColor;
+      }
+    </script>
+    <script type="text/javascript" src="./webgl-utils.js"></script>
+    <script type="text/javascript" src="./initShaders.js"></script>
+    <script type="text/javascript" src="./MV.js"></script>
+    <script type="text/javascript" src="./triangle.js"></script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="App">
+      <div class="canvas-area" id="canvas-container">
+        <canvas class="gl_canvas_class" id="gl_canvas" width="1000" height="1000">Your browser doesn't support the HTML5 canvas element!</canvas>
+      </div>
+    </div>      
+  </body>
+</html>
