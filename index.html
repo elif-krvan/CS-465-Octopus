@@ -1,49 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="./tripaint.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="CS465 Assignment 1"
-    />
-    <title>Octopus - CS465 Assignment 2</title>
-    <link rel = "icon" href = "./icons/icons8-triangle-100.png" type = "image/x-icon"> 
-    <script id="vertex-shader" type="x-shader/x-vertex">
-      attribute vec4 vPosition;
-      attribute vec4 vColor;
-      uniform mat4 viewMatrix;
+    <head>
+        <!-- <link rel="stylesheet" href="./tripaint.css"> -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="CS465 Assignment 1" />
+        <title>Octopus - CS465 Assignment 2</title>
+        <!-- <link rel = "icon" href = "./icons/icons8-triangle-100.png" type = "image/x-icon">  -->
+        <script id="vertex-shader" type="x-shader/x-vertex">
 
-      varying vec4 fColor;
-      void main() {
-        gl_Position = viewMatrix * vPosition;
-        fColor = vColor;
-      }
-    </script>
-    <script id="fragment-shader" type="x-shader/x-fragment">
-      precision mediump float;
+            attribute  vec4 vPosition;
 
-      varying vec4 fColor;
-      void main() {
-        gl_FragColor = fColor;
-      }
-    </script>
-    <script type="text/javascript" src="./webgl-utils.js"></script>
-    <script type="text/javascript" src="./initShaders.js"></script>
-    <script type="text/javascript" src="./MV.js"></script>
-    <script type="text/javascript" src="./triangle.js"></script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="App">
-      <div class="canvas-area" id="canvas-container">
-        <canvas class="gl_canvas_class" id="gl_canvas" width="1000" height="1000">Your browser doesn't support the HTML5 canvas element!</canvas>
-      </div>
-    </div>      
-  </body>
+            uniform mat4 modelViewMatrix;
+            uniform mat4 projectionMatrix;
+
+            void main()
+            {
+                gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+            }
+        </script>
+
+        <script id="fragment-shader" type="x-shader/x-fragment">
+
+            precision mediump float;
+
+            void main()
+            {
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+
+            }
+        </script>
+        <script type="text/javascript" src="./webgl-utils.js"></script>
+        <script type="text/javascript" src="./initShaders.js"></script>
+        <script type="text/javascript" src="./MV.js"></script>
+        <script type="text/javascript" src="./node.js"></script>
+        <script type="text/javascript" src="./const.js"></script>
+        <script type="text/javascript" src="./animation.js"></script>
+    </head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div class="App">
+            <div id="slider0">
+                torso angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider10">
+                head2 angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+
+            <div id="slider1">
+                head1 angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+
+            <div id="slider2">
+                left upper arm angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider3">
+                left lower arm angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider4">
+                right upper arm angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider5">
+                right lower arm angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider6">
+                left upper leg angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider7">
+                left lower leg angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div id="slider8">
+                right upper leg angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+
+            <div id="slider9">
+                right lower leg angle -180
+                <input
+                    id="slide"
+                    type="range"
+                    min="-180"
+                    max="180"
+                    step="10"
+                    value="0"
+                />
+                180
+            </div>
+            <br />
+            <div>
+                <canvas id="gl-canvas" width="512" height="512">
+                    Oops ... your browser doesn't support the HTML5 canvas
+                    element
+                </canvas>
+            </div>
+        </div>
+    </body>
 </html>
