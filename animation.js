@@ -21,17 +21,17 @@ var vertices = [
 ];
 
 var torsoHeight = 5.0;
-var torsoWidth = 1.0;
+var torsoWidth = 5.0;
 var upperArmHeight = 3.0;
 var lowerArmHeight = 2.0;
-var upperArmWidth = 0.5;
-var lowerArmWidth = 0.5;
+var upperArmWidth = 1.0;
+var lowerArmWidth = 0.75;
 var upperLegWidth = 0.5;
 var lowerLegWidth = 0.5;
 var lowerLegHeight = 2.0;
 var upperLegHeight = 3.0;
-var headHeight = 1.5;
-var headWidth = 1.0;
+var headHeight = 4.0;
+var headWidth = 4.0;
 
 var numNodes = 10;
 var numAngles = 11;
@@ -65,20 +65,26 @@ function scale4(a, b, c) {
 
 //--------------------------------------------
 
-function quad(a, b, c, d) {
+function quad(a, b, c, d, color) {
     pointsArray.push(vertices[a]);
     pointsArray.push(vertices[b]);
     pointsArray.push(vertices[c]);
     pointsArray.push(vertices[d]);
+
+    // Assign the same color to all vertices of the quad
+    for (let i = 0; i < 4; i++) {
+        pointsArray.push(color);
+    }
 }
 
 function cube() {
-    quad(1, 0, 3, 2);
-    quad(2, 3, 7, 6);
-    quad(3, 0, 4, 7);
-    quad(6, 5, 1, 2);
-    quad(4, 5, 6, 7);
-    quad(5, 4, 0, 1);
+    // Use different colors for each face
+    quad(1, 0, 3, 2, vec4(1.0, 0.0, 0.0, 1.0)); // Red
+    quad(2, 3, 7, 6, vec4(0.0, 1.0, 0.0, 1.0)); // Green
+    quad(3, 0, 4, 7, vec4(0.0, 0.0, 1.0, 1.0)); // Blue
+    quad(6, 5, 1, 2, vec4(1.0, 1.0, 0.0, 1.0)); // Yellow
+    quad(4, 5, 6, 7, vec4(1.0, 0.0, 1.0, 1.0)); // Magenta
+    quad(5, 4, 0, 1, vec4(0.0, 1.0, 1.0, 1.0)); // Cyan
 }
 
 window.onload = function init() {
@@ -98,6 +104,7 @@ window.onload = function init() {
     program = initShaders(gl, "vertex-shader", "fragment-shader");
 
     gl.useProgram(program);
+    gl.enable(gl.DEPTH_TEST);
 
     instanceMatrix = mat4();
 
@@ -127,6 +134,17 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
+
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.vertexAttribPointer(
+        vColor,
+        4,
+        gl.FLOAT,
+        false,
+        0,
+        sizeof.vec4 * numVertices
+    );
+    gl.enableVertexAttribArray(vColor);
 
     document.getElementById("slider0").onchange = function () {
         theta[torsoId] = event.srcElement.value;
@@ -181,7 +199,7 @@ window.onload = function init() {
 };
 
 var render = function () {
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     traverse(torsoId);
     requestAnimFrame(render);
 };
