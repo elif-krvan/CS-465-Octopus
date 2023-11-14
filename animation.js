@@ -6,7 +6,6 @@ var projectionMatrix;
 var modelViewMatrix;
 
 var instanceMatrix;
-
 var modelViewMatrixLoc;
 
 var vertices = [
@@ -42,6 +41,8 @@ var moveY = 0;
 var canvasWidth;
 var canvasHeight;
 
+var octopusColor = vec4(0.831, 0.373, 0.349, 1.0);
+
 var numVertices = 4;
 
 var stack = [];
@@ -52,9 +53,11 @@ for (var i = 0; i < numNodes; i++)
     figure[i] = createNode(null, null, null, null);
 
 var vBuffer;
+var cBuffer;
 var modelViewLoc;
 
 var pointsArray = [];
+var colorsArray = [];
 
 //-------------------------------------------
 
@@ -74,20 +77,20 @@ function quad(a, b, c, d, color) {
     pointsArray.push(vertices[c]);
     pointsArray.push(vertices[d]);
 
-    // Assign the same color to all vertices of the quad
-    for (let i = 0; i < 4; i++) {
-        pointsArray.push(color);
-    }
+    colorsArray.push(octopusColor);
+    colorsArray.push(octopusColor);
+    colorsArray.push(octopusColor);
+    colorsArray.push(octopusColor);
 }
 
 function cube() {
     // Use different colors for each face
-    quad(1, 0, 3, 2, vec4(0.0, 0.0, 0.0, 1.0)); // Red
-    quad(2, 3, 7, 6, vec4(0.0, 0.0, 0.0, 1.0)); // Green
-    quad(3, 0, 4, 7, vec4(0.0, 0.0, 0.0, 1.0)); // Blue
-    quad(6, 5, 1, 2, vec4(0.0, 0.0, 0.0, 1.0)); // Yellow
-    quad(4, 5, 6, 7, vec4(0.0, 0.0, 0.0, 1.0)); // Magenta
-    quad(5, 4, 0, 1, vec4(0.0, 0.0, 0.0, 1.0)); // Cyan
+    quad(1, 0, 3, 2);
+    quad(2, 3, 7, 6);
+    quad(3, 0, 4, 7);
+    quad(6, 5, 1, 2);
+    quad(4, 5, 6, 7);
+    quad(5, 4, 0, 1);
 }
 
 window.onload = function init() {
@@ -137,6 +140,7 @@ window.onload = function init() {
     cube();
 
     vBuffer = gl.createBuffer();
+    cBuffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
@@ -144,6 +148,9 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
 
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);

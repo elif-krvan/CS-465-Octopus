@@ -261,7 +261,6 @@ function middleArm1() {
 function lowerArm1() {
     var translateY =
         (torsoHeight + lowerArmHeight) / 2 + middleArmHeight + upperArmHeight;
-    // var translateY = (lowerArmHeight + torsoHeight) / 2 + 2 * middleArmHeight;
 
     instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(
