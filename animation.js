@@ -36,6 +36,11 @@ var numAngles = 11;
 var angle = 0;
 
 var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var moveX = 0;
+var moveY = 0;
+
+var canvasWidth;
+var canvasHeight;
 
 var numVertices = 4;
 
@@ -87,6 +92,9 @@ function cube() {
 
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
+
+    canvasHeight = canvas.height;
+    canvasWidth = canvas.width;
 
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) {
@@ -140,6 +148,15 @@ window.onload = function init() {
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+
+    document.getElementById("slider-x").onchange = function () {
+        moveX = event.srcElement.value;
+        initNodes(torsoId);
+    };
+    document.getElementById("slider-y").onchange = function () {
+        moveY = event.srcElement.value;
+        initNodes(torsoId);
+    };
 
     document.getElementById("slider0").onchange = function () {
         theta[torsoId] = event.srcElement.value;

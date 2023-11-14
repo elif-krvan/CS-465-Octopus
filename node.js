@@ -1,3 +1,5 @@
+var translateBack;
+
 function createNode(transform, render, sibling, child) {
     var node = {
         transform: transform,
@@ -54,11 +56,14 @@ function setLowerArmProperties(armId, armFcn) {
 
 function initNodes(Id) {
     var m = mat4();
-    var translateBack;
 
     switch (Id) {
         case torsoId:
-            m = rotate(theta[torsoId], 0, 1, 0);
+            console.log("X", moveX);
+            console.log("Y", moveY);
+            m = translate(moveX, moveY, 0.0);
+            m = mult(m, rotate(theta[torsoId], 0, 1, 0));
+            // m = rotate(theta[torsoId], 0, 1, 0);
             figure[torsoId] = createNode(m, torso, null, [
                 upperArmId1,
                 upperArmId2,

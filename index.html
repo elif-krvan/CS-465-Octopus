@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!-- <link rel="stylesheet" href="./tripaint.css"> -->
+        <link rel="stylesheet" href="./octopus.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -54,152 +54,184 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div class="App">
-            <div id="slider0">
-                torso angle -180
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider10">
-                head2 angle -180
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
+            <div class="menu">
+                <div id="arm-sliders">
+                    <div id="slider0">
+                        torso angle -180
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider10">
+                        head2 angle -180
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
 
-            <div id="slider1">
-                Upper Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
+                    <div id="slider1">
+                        Upper Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
 
-            <div id="slider2">
-                Middle Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider3">
-                Lower Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider4">
-                Upper Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider5">
-                Middle Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider6">
-                Lower Arm Angle
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider7">
-                left lower leg angle -180
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
-            <div id="slider8">
-                right upper leg angle -180
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
-            </div>
-            <br />
+                    <div id="slider2">
+                        Middle Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider3">
+                        Lower Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider4">
+                        Upper Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider5">
+                        Middle Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider6">
+                        Lower Arm Angle
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider7">
+                        left lower leg angle -180
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider8">
+                        right upper leg angle -180
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
 
-            <div id="slider9">
-                right lower leg angle -180
-                <input
-                    id="slide"
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="10"
-                    value="0"
-                />
-                180
+                    <div id="slider9">
+                        right lower leg angle -180
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                </div>
+                <div id="move-sliders">
+                    <div id="slider-x">
+                        Move along the x direction
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-20"
+                            max="20"
+                            step="0.5"
+                            value="0"
+                        />
+                        180
+                    </div>
+                    <br />
+                    <div id="slider-y">
+                        Move Along the y direction
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-20"
+                            max="20"
+                            step="0.5"
+                            value="0"
+                        />
+                        180
+                    </div>
+                </div>
             </div>
-            <br />
+
             <div>
                 <canvas id="gl-canvas" width="800" height="800">
                     Oops ... your browser doesn't support the HTML5 canvas
