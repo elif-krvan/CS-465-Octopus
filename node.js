@@ -8,17 +8,60 @@ function createNode(transform, render, sibling, child) {
     return node;
 }
 
+function setUpperArmProperties(xPosition, armId, middleArmId, armFcn) {
+    console.log("node1");
+    var rotatePointY = torsoHeight / 2;
+
+    // translating x position at this step, also traslates child arms
+    // translate y position to the top of the arm so that the rotation can be done wrt the top of the arm
+    m = translate(-xPosition, -rotatePointY, 0.0);
+
+    // rotate the arms wrt x and z axis
+    m = mult(m, rotate(theta[armId], 1, 0, 1));
+
+    // translate the arm where it was before the rotation
+    translateBack = translate(0.0, rotatePointY, 0.0);
+    m = mult(m, translateBack);
+
+    figure[armId] = createNode(m, armFcn, null, middleArmId);
+}
+
+function setMiddleArmProperties(armId, lowerArmId, armFcn) {
+    console.log("middle");
+    var rotatePointY = torsoHeight / 2 + upperArmHeight;
+
+    m = translate(0, -rotatePointY, 0.0);
+    m = mult(m, rotate(theta[armId], 1, 0, 1));
+
+    translateBack = translate(0.0, rotatePointY, 0.0);
+    m = mult(m, translateBack);
+
+    figure[armId] = createNode(m, armFcn, null, lowerArmId);
+}
+
+function setLowerArmProperties(armId, armFcn) {
+    console.log("lower");
+    var rotatePointY = torsoHeight / 2 + middleArmHeight + upperArmHeight;
+
+    m = translate(0.0, -rotatePointY, 0.0);
+    m = mult(m, rotate(theta[armId], 1, 0, 1));
+
+    translateBack = translate(0.0, rotatePointY, 0.0);
+    m = mult(m, translateBack);
+
+    figure[armId] = createNode(m, armFcn, null, null);
+}
+
 function initNodes(Id) {
     var m = mat4();
     var translateBack;
 
     switch (Id) {
         case torsoId:
-            console.log("node0");
             m = rotate(theta[torsoId], 0, 1, 0);
             figure[torsoId] = createNode(m, torso, null, [
                 upperArmId1,
-                // upperArmId2,
+                upperArmId2,
                 // upperArmId3,
                 // upperArmId4,
                 // upperArmId5,
@@ -39,44 +82,36 @@ function initNodes(Id) {
         //     break;
 
         case upperArmId1:
-            console.log("node1");
-            var rotatePointY = torsoHeight / 2;
+            var translateX = (torsoWidth - upperArmWidth) / 2;
+            setUpperArmProperties(
+                translateX,
+                upperArmId1,
+                middleArmId1,
+                upperArm1
+            );
+            break;
+        case upperArmId2:
             var translateX = (torsoWidth - upperArmWidth) / 2;
 
-            m = translate(-translateX, -rotatePointY, 0.0);
-            m = mult(m, rotate(theta[upperArmId1], 1, 0, 1));
-
-            translateBack = translate(0.0, rotatePointY, 0.0);
-            m = mult(m, translateBack);
-            figure[upperArmId1] = createNode(m, upperArm1, null, middleArmId1);
+            setUpperArmProperties(
+                -translateX,
+                upperArmId2,
+                middleArmId2,
+                upperArm1
+            );
             break;
 
         case middleArmId1:
-            console.log("node2");
-            var rotatePointY = torsoHeight / 2 + upperArmHeight;
-
-            m = translate(0, -rotatePointY, 0.0);
-            m = mult(m, rotate(theta[middleArmId1], 1, 0, 1));
-
-            translateBack = translate(0.0, rotatePointY, 0.0);
-            m = mult(m, translateBack);
-
-            figure[middleArmId1] = createNode(m, middleArm1, null, lowerArmId1);
+            setMiddleArmProperties(middleArmId1, lowerArmId1, middleArm1);
             break;
-
+        case middleArmId2:
+            setMiddleArmProperties(middleArmId2, lowerArmId2, middleArm1);
+            break;
         case lowerArmId1:
-            console.log("node3");
-            var rotatePointY = 0;
-            var rotatePointY =
-                torsoHeight / 2 + middleArmHeight + upperArmHeight;
-
-            m = translate(0.0, -rotatePointY, 0.0);
-            m = mult(m, rotate(theta[lowerArmId1], 1, 0, 1));
-
-            translateBack = translate(0.0, rotatePointY, 0.0);
-            m = mult(m, translateBack);
-
-            figure[lowerArmId1] = createNode(m, lowerArm1, null, null);
+            setLowerArmProperties(lowerArmId1, lowerArm1);
+            break;
+        case lowerArmId2:
+            setLowerArmProperties(lowerArmId2, lowerArm1);
             break;
 
         // case rightUpperArmId:
@@ -195,7 +230,7 @@ function torso() {
 // }
 
 function upperArm1() {
-    var d = (upperArmHeight + torsoHeight) / 2;
+    var translateY = (upperArmHeight + torsoHeight) / 2;
 
     instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(

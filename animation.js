@@ -22,8 +22,8 @@ var vertices = [
 
 var torsoHeight = 5.0;
 var torsoWidth = 5.0;
-var upperArmHeight = 5.0;
-var middleArmHeight = 6.5;
+var upperArmHeight = 6.0;
+var middleArmHeight = 6.0;
 var lowerArmHeight = 3.0;
 var upperArmWidth = 1.0;
 var middleArmWidth = 0.95;
@@ -31,13 +31,13 @@ var lowerArmWidth = 0.85;
 var headHeight = 4.0;
 var headWidth = 4.0;
 
-var numNodes = 4;
+var numNodes = 7;
 var numAngles = 11;
 var angle = 0;
 
-var theta = [0, 0, 0, 0, 0, 0, 180, 0, 180, 0, 0];
+var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-var numVertices = 24;
+var numVertices = 4;
 
 var stack = [];
 
@@ -77,12 +77,12 @@ function quad(a, b, c, d, color) {
 
 function cube() {
     // Use different colors for each face
-    quad(1, 0, 3, 2, vec4(1.0, 0.0, 0.0, 1.0)); // Red
-    quad(2, 3, 7, 6, vec4(0.0, 1.0, 0.0, 1.0)); // Green
-    quad(3, 0, 4, 7, vec4(0.0, 0.0, 1.0, 1.0)); // Blue
-    quad(6, 5, 1, 2, vec4(1.0, 1.0, 0.0, 1.0)); // Yellow
-    quad(4, 5, 6, 7, vec4(1.0, 0.0, 1.0, 1.0)); // Magenta
-    quad(5, 4, 0, 1, vec4(0.0, 1.0, 1.0, 1.0)); // Cyan
+    quad(1, 0, 3, 2, vec4(0.0, 0.0, 0.0, 1.0)); // Red
+    quad(2, 3, 7, 6, vec4(0.0, 0.0, 0.0, 1.0)); // Green
+    quad(3, 0, 4, 7, vec4(0.0, 0.0, 0.0, 1.0)); // Blue
+    quad(6, 5, 1, 2, vec4(0.0, 0.0, 0.0, 1.0)); // Yellow
+    quad(4, 5, 6, 7, vec4(0.0, 0.0, 0.0, 1.0)); // Magenta
+    quad(5, 4, 0, 1, vec4(0.0, 0.0, 0.0, 1.0)); // Cyan
 }
 
 window.onload = function init() {
@@ -102,6 +102,9 @@ window.onload = function init() {
     program = initShaders(gl, "vertex-shader", "fragment-shader");
 
     gl.useProgram(program);
+    // gl.enable(gl.CULL_FACE);
+    // gl.frontFace(gl.BACK);
+
     gl.enable(gl.DEPTH_TEST);
 
     instanceMatrix = mat4();
@@ -135,14 +138,7 @@ window.onload = function init() {
     gl.enableVertexAttribArray(vPosition);
 
     var vColor = gl.getAttribLocation(program, "vColor");
-    gl.vertexAttribPointer(
-        vColor,
-        4,
-        gl.FLOAT,
-        false,
-        0,
-        sizeof.vec4 * numVertices
-    );
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
 
     document.getElementById("slider0").onchange = function () {
@@ -155,25 +151,25 @@ window.onload = function init() {
     };
 
     document.getElementById("slider2").onchange = function () {
-        theta[torsoId] = event.srcElement.value;
+        theta[middleArmId1] = event.srcElement.value;
         initNodes(middleArmId1);
     };
     document.getElementById("slider3").onchange = function () {
-        theta[torsoId] = event.srcElement.value;
+        theta[lowerArmId1] = event.srcElement.value;
         initNodes(lowerArmId1);
     };
 
     document.getElementById("slider4").onchange = function () {
-        theta[rightUpperArmId] = event.srcElement.value;
-        initNodes(rightUpperArmId);
+        theta[upperArmId2] = event.srcElement.value;
+        initNodes(upperArmId2);
     };
     document.getElementById("slider5").onchange = function () {
-        theta[rightLowerArmId] = event.srcElement.value;
-        initNodes(rightLowerArmId);
+        theta[middleArmId2] = event.srcElement.value;
+        initNodes(middleArmId2);
     };
     document.getElementById("slider6").onchange = function () {
-        theta[leftUpperLegId] = event.srcElement.value;
-        initNodes(leftUpperLegId);
+        theta[lowerArmId2] = event.srcElement.value;
+        initNodes(lowerArmId2);
     };
     document.getElementById("slider7").onchange = function () {
         theta[leftLowerLegId] = event.srcElement.value;
