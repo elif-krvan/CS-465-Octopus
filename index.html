@@ -20,16 +20,19 @@
 
             attribute  vec4 vPosition;
             attribute vec4 vColor;
+            attribute vec2 vTexCoord;
 
             uniform mat4 modelViewMatrix;
             uniform mat4 projectionMatrix;
 
             varying vec4 fColor;
+            varying vec2 texCoord;
 
             void main()
             {
                 gl_Position = projectionMatrix * modelViewMatrix * vPosition;
                 fColor = vColor;
+                texCoord = vTexCoord;
             }
         </script>
 
@@ -38,10 +41,13 @@
             precision mediump float;
             varying vec4 fColor;
 
+            varying vec2 texCoord;
+            uniform sampler2D u_texture;
+
             void main()
             {
-              gl_FragColor = fColor;
-
+                vec4 texColor = texture2D(u_texture, texCoord);
+                gl_FragColor = fColor;
             }
         </script>
         <script type="text/javascript" src="./webgl-utils.js"></script>
@@ -233,7 +239,12 @@
             </div>
 
             <div>
-                <canvas id="gl-canvas" width="800" height="800">
+                <canvas
+                    id="gl-canvas"
+                    style="background: url('./bg.jpg')"
+                    width="1000"
+                    height="1000"
+                >
                     Oops ... your browser doesn't support the HTML5 canvas
                     element
                 </canvas>

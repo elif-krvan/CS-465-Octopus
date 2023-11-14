@@ -5,3 +5,9 @@
     justify-content: space-evenly;
     align-items: center;
 }
+
+/* #gl-canvas {
+    display: block;
+    background: url("./bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+} */

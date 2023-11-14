@@ -54,6 +54,12 @@ for (var i = 0; i < numNodes; i++)
 
 var vBuffer;
 var cBuffer;
+var bgBuffer;
+
+var vTexCoord;
+
+var textureObj;
+
 var modelViewLoc;
 
 var pointsArray = [];
@@ -141,7 +147,9 @@ window.onload = function init() {
 
     vBuffer = gl.createBuffer();
     cBuffer = gl.createBuffer();
+    bgBuffer = gl.createBuffer();
 
+    // vertices buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
@@ -149,12 +157,55 @@ window.onload = function init() {
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
+    // color buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
 
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+
+    // background color set up
+    gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([-1, -1, 1, -1, 1, 1, -1, 1]),
+        gl.STATIC_DRAW
+    );
+
+    vTexCoord = gl.getAttribLocation(program, "vTexCoord");
+    gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vTexCoord);
+
+    gl.disable(gl.DEPTH_TEST);
+
+    // Load and bind the texture
+    var texture = gl.createTexture();
+    var image = new Image();
+    image.src = "./bg.jpg";
+    image.onload = function () {
+        console.log("loaded image");
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.RGBA,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            image
+        );
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+        // Set the texture uniform
+        var textureLocation = gl.getUniformLocation(program, "u_texture");
+        gl.uniform1i(textureLocation, 0);
+
+        // Render the scene
+        gl.clearColor(0.0, 0.0, 0.0, 0.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, 8);
+    };
 
     document.getElementById("slider-x").onchange = function () {
         moveX = event.srcElement.value;
@@ -219,6 +270,20 @@ window.onload = function init() {
 
 var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Disable depth testing for the background
+    gl.disable(gl.DEPTH_TEST);
+
+    // Draw the background
+    gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
+    gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vTexCoord);
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+    // Enable depth testing for the octopus
+    gl.enable(gl.DEPTH_TEST);
+
     traverse(torsoId);
     requestAnimFrame(render);
 };
