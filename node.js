@@ -10,6 +10,7 @@ function createNode(transform, render, sibling, child) {
 
 function initNodes(Id) {
     var m = mat4();
+    var translateBack;
 
     switch (Id) {
         case torsoId:
@@ -39,22 +40,42 @@ function initNodes(Id) {
 
         case upperArmId1:
             console.log("node1");
-            m = translate(-(torsoWidth / 2), -torsoHeight * 0.5, 0.0);
-            m = mult(m, rotate(theta[upperArmId1], 1, 1, 0));
+            var rotatePointY = torsoHeight / 2;
+            var translateX = (torsoWidth - upperArmWidth) / 2;
+
+            m = translate(-translateX, -rotatePointY, 0.0);
+            m = mult(m, rotate(theta[upperArmId1], 1, 0, 1));
+
+            translateBack = translate(0.0, rotatePointY, 0.0);
+            m = mult(m, translateBack);
             figure[upperArmId1] = createNode(m, upperArm1, null, middleArmId1);
             break;
 
         case middleArmId1:
             console.log("node2");
-            m = translate(0, -upperArmHeight - 0.7, 0.0);
-            m = mult(m, rotate(theta[upperArmId2], 1, 0, 0));
+            var rotatePointY = torsoHeight / 2 + upperArmHeight;
+
+            m = translate(0, -rotatePointY, 0.0);
+            m = mult(m, rotate(theta[middleArmId1], 1, 0, 1));
+
+            translateBack = translate(0.0, rotatePointY, 0.0);
+            m = mult(m, translateBack);
+
             figure[middleArmId1] = createNode(m, middleArm1, null, lowerArmId1);
             break;
 
         case lowerArmId1:
             console.log("node3");
-            m = translate(0.0, -upperArmHeight + 0.3, 0.0);
-            m = mult(m, rotate(theta[upperArmId3], 1, 0, 0));
+            var rotatePointY = 0;
+            var rotatePointY =
+                torsoHeight / 2 + middleArmHeight + upperArmHeight;
+
+            m = translate(0.0, -rotatePointY, 0.0);
+            m = mult(m, rotate(theta[lowerArmId1], 1, 0, 1));
+
+            translateBack = translate(0.0, rotatePointY, 0.0);
+            m = mult(m, translateBack);
+
             figure[lowerArmId1] = createNode(m, lowerArm1, null, null);
             break;
 
@@ -146,13 +167,15 @@ function traverse(Id) {
 }
 
 function torso() {
-    instanceMatrix = mult(
-        modelViewMatrix,
-        translate(0.0, 0.5 * torsoHeight, 0.0)
-    );
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(torsoWidth, torsoHeight, torsoWidth)
+    );
+
+    gl.uniform4fv(
+        gl.getUniformLocation(program, "vColor"),
+        flatten(vec4(1.0, 1.0, 0.0, 1.0))
     );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
@@ -172,7 +195,9 @@ function torso() {
 // }
 
 function upperArm1() {
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
+    var d = (upperArmHeight + torsoHeight) / 2;
+
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(upperArmWidth, upperArmHeight, upperArmWidth)
@@ -182,7 +207,9 @@ function upperArm1() {
 }
 
 function middleArm1() {
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
+    var translateY = (middleArmHeight + torsoHeight) / 2 + upperArmHeight;
+
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(middleArmWidth, middleArmHeight, middleArmWidth)
@@ -192,7 +219,11 @@ function middleArm1() {
 }
 
 function lowerArm1() {
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
+    var translateY =
+        (torsoHeight + lowerArmHeight) / 2 + middleArmHeight + upperArmHeight;
+    // var translateY = (lowerArmHeight + torsoHeight) / 2 + 2 * middleArmHeight;
+
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(lowerArmWidth, lowerArmHeight, lowerArmWidth)
