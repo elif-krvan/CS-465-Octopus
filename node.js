@@ -13,99 +13,115 @@ function initNodes(Id) {
 
     switch (Id) {
         case torsoId:
+            console.log("node0");
             m = rotate(theta[torsoId], 0, 1, 0);
-            figure[torsoId] = createNode(m, torso, null, headId);
+            figure[torsoId] = createNode(m, torso, null, [
+                upperArmId1,
+                // upperArmId2,
+                // upperArmId3,
+                // upperArmId4,
+                // upperArmId5,
+                // upperArmId6,
+                // upperArmId7,
+                // upperArmId8,
+            ]);
             break;
 
-        case headId:
-        case head1Id:
-        case head2Id:
-            m = translate(0.0, torsoHeight + 0.5 * headHeight, 0.0);
-            m = mult(m, rotate(theta[head1Id], 1, 0, 0));
-            m = mult(m, rotate(theta[head2Id], 0, 1, 0));
-            m = mult(m, translate(0.0, -0.5 * headHeight, 0.0));
-            figure[headId] = createNode(m, head, leftUpperArmId, null);
+        // case headId:
+        // case head1Id:
+        // case head2Id:
+        //     m = translate(0.0, torsoHeight + 0.5 * headHeight, 0.0);
+        //     m = mult(m, rotate(theta[head1Id], 1, 0, 0));
+        //     m = mult(m, rotate(theta[head2Id], 0, 1, 0));
+        //     m = mult(m, translate(0.0, -0.5 * headHeight, 0.0));
+        //     figure[headId] = createNode(m, head, leftUpperArmId, null);
+        //     break;
+
+        case upperArmId1:
+            console.log("node1");
+            m = translate(-(torsoWidth / 2), -torsoHeight * 0.5, 0.0);
+            m = mult(m, rotate(theta[upperArmId1], 1, 1, 0));
+            figure[upperArmId1] = createNode(m, upperArm1, null, middleArmId1);
             break;
 
-        case leftUpperArmId:
-            m = translate(
-                -(torsoWidth + upperArmWidth),
-                0.9 * torsoHeight,
-                0.0
-            );
-            m = mult(m, rotate(theta[leftUpperArmId], 1, 0, 0));
-            figure[leftUpperArmId] = createNode(
-                m,
-                leftUpperArm,
-                rightUpperArmId,
-                leftLowerArmId
-            );
+        case middleArmId1:
+            console.log("node2");
+            m = translate(0, -upperArmHeight - 0.7, 0.0);
+            m = mult(m, rotate(theta[upperArmId2], 1, 0, 0));
+            figure[middleArmId1] = createNode(m, middleArm1, null, lowerArmId1);
             break;
 
-        case rightUpperArmId:
-            m = translate(torsoWidth + upperArmWidth, 0.9 * torsoHeight, 0.0);
-            m = mult(m, rotate(theta[rightUpperArmId], 1, 0, 0));
-            figure[rightUpperArmId] = createNode(
-                m,
-                rightUpperArm,
-                leftUpperLegId,
-                rightLowerArmId
-            );
+        case lowerArmId1:
+            console.log("node3");
+            m = translate(0.0, -upperArmHeight + 0.3, 0.0);
+            m = mult(m, rotate(theta[upperArmId3], 1, 0, 0));
+            figure[lowerArmId1] = createNode(m, lowerArm1, null, null);
             break;
 
-        case leftUpperLegId:
-            m = translate(
-                -(torsoWidth + upperLegWidth),
-                0.1 * upperLegHeight,
-                0.0
-            );
-            m = mult(m, rotate(theta[leftUpperLegId], 1, 0, 0));
-            figure[leftUpperLegId] = createNode(
-                m,
-                leftUpperLeg,
-                rightUpperLegId,
-                leftLowerLegId
-            );
-            break;
+        // case rightUpperArmId:
+        //     m = translate(torsoWidth + upperArmWidth, 0.9 * torsoHeight, 0.0);
+        //     m = mult(m, rotate(theta[rightUpperArmId], 1, 0, 0));
+        //     figure[rightUpperArmId] = createNode(
+        //         m,
+        //         rightUpperArm,
+        //         leftUpperLegId,
+        //         rightLowerArmId
+        //     );
+        //     break;
 
-        case rightUpperLegId:
-            m = translate(
-                torsoWidth + upperLegWidth,
-                0.1 * upperLegHeight,
-                0.0
-            );
-            m = mult(m, rotate(theta[rightUpperLegId], 1, 0, 0));
-            figure[rightUpperLegId] = createNode(
-                m,
-                rightUpperLeg,
-                null,
-                rightLowerLegId
-            );
-            break;
+        // case leftUpperLegId:
+        //     m = translate(
+        //         -(torsoWidth + upperLegWidth),
+        //         0.1 * upperLegHeight,
+        //         0.0
+        //     );
+        //     m = mult(m, rotate(theta[leftUpperLegId], 1, 0, 0));
+        //     figure[leftUpperLegId] = createNode(
+        //         m,
+        //         leftUpperLeg,
+        //         rightUpperLegId,
+        //         leftLowerLegId
+        //     );
+        //     break;
 
-        case leftLowerArmId:
-            m = translate(0.0, upperArmHeight, 0.0);
-            m = mult(m, rotate(theta[leftLowerArmId], 1, 0, 0));
-            figure[leftLowerArmId] = createNode(m, leftLowerArm, null, null);
-            break;
+        // case rightUpperLegId:
+        //     m = translate(
+        //         torsoWidth + upperLegWidth,
+        //         0.1 * upperLegHeight,
+        //         0.0
+        //     );
+        //     m = mult(m, rotate(theta[rightUpperLegId], 1, 0, 0));
+        //     figure[rightUpperLegId] = createNode(
+        //         m,
+        //         rightUpperLeg,
+        //         null,
+        //         rightLowerLegId
+        //     );
+        //     break;
 
-        case rightLowerArmId:
-            m = translate(0.0, upperArmHeight, 0.0);
-            m = mult(m, rotate(theta[rightLowerArmId], 1, 0, 0));
-            figure[rightLowerArmId] = createNode(m, rightLowerArm, null, null);
-            break;
+        // case leftLowerArmId:
+        //     m = translate(0.0, upperArmHeight, 0.0);
+        //     m = mult(m, rotate(theta[leftLowerArmId], 1, 0, 0));
+        //     figure[leftLowerArmId] = createNode(m, leftLowerArm, null, null);
+        //     break;
 
-        case leftLowerLegId:
-            m = translate(0.0, upperLegHeight, 0.0);
-            m = mult(m, rotate(theta[leftLowerLegId], 1, 0, 0));
-            figure[leftLowerLegId] = createNode(m, leftLowerLeg, null, null);
-            break;
+        // case rightLowerArmId:
+        //     m = translate(0.0, upperArmHeight, 0.0);
+        //     m = mult(m, rotate(theta[rightLowerArmId], 1, 0, 0));
+        //     figure[rightLowerArmId] = createNode(m, rightLowerArm, null, null);
+        //     break;
 
-        case rightLowerLegId:
-            m = translate(0.0, upperLegHeight, 0.0);
-            m = mult(m, rotate(theta[rightLowerLegId], 1, 0, 0));
-            figure[rightLowerLegId] = createNode(m, rightLowerLeg, null, null);
-            break;
+        // case leftLowerLegId:
+        //     m = translate(0.0, upperLegHeight, 0.0);
+        //     m = mult(m, rotate(theta[leftLowerLegId], 1, 0, 0));
+        //     figure[leftLowerLegId] = createNode(m, leftLowerLeg, null, null);
+        //     break;
+
+        // case rightLowerLegId:
+        //     m = translate(0.0, upperLegHeight, 0.0);
+        //     m = mult(m, rotate(theta[rightLowerLegId], 1, 0, 0));
+        //     figure[rightLowerLegId] = createNode(m, rightLowerLeg, null, null);
+        //     break;
     }
 }
 
@@ -116,7 +132,13 @@ function traverse(Id) {
     modelViewMatrix = mult(modelViewMatrix, figure[Id].transform);
     figure[Id].render();
 
-    if (figure[Id].child != null) traverse(figure[Id].child);
+    if (Array.isArray(figure[Id].child)) {
+        figure[Id].child.forEach(function (childId) {
+            traverse(childId);
+        });
+    } else if (figure[Id].child != null) {
+        traverse(figure[Id].child);
+    }
 
     modelViewMatrix = stack.pop();
 
@@ -136,24 +158,21 @@ function torso() {
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
-function head() {
-    instanceMatrix = mult(
-        modelViewMatrix,
-        translate(0.0, 0.5 * headHeight, 0.0)
-    );
-    instanceMatrix = mult(
-        instanceMatrix,
-        scale4(headWidth, headHeight, headWidth)
-    );
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
-    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
-}
+// function head() {
+//     instanceMatrix = mult(
+//         modelViewMatrix,
+//         translate(0.0, 0.5 * headHeight, 0.0)
+//     );
+//     instanceMatrix = mult(
+//         instanceMatrix,
+//         scale4(headWidth, headHeight, headWidth)
+//     );
+//     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+//     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+// }
 
-function leftUpperArm() {
-    instanceMatrix = mult(
-        modelViewMatrix,
-        translate(0.0, 0.5 * upperArmHeight, 0.0)
-    );
+function upperArm1() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(upperArmWidth, upperArmHeight, upperArmWidth)
@@ -162,11 +181,18 @@ function leftUpperArm() {
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
-function leftLowerArm() {
+function middleArm1() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
     instanceMatrix = mult(
-        modelViewMatrix,
-        translate(0.0, 0.5 * lowerArmHeight, 0.0)
+        instanceMatrix,
+        scale4(middleArmWidth, middleArmHeight, middleArmWidth)
     );
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+}
+
+function lowerArm1() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.0, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(lowerArmWidth, lowerArmHeight, lowerArmWidth)

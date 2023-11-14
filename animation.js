@@ -22,18 +22,16 @@ var vertices = [
 
 var torsoHeight = 5.0;
 var torsoWidth = 5.0;
-var upperArmHeight = 3.0;
-var lowerArmHeight = 2.0;
+var upperArmHeight = 5.0;
+var middleArmHeight = 6.5;
+var lowerArmHeight = 3.0;
 var upperArmWidth = 1.0;
-var lowerArmWidth = 0.75;
-var upperLegWidth = 0.5;
-var lowerLegWidth = 0.5;
-var lowerLegHeight = 2.0;
-var upperLegHeight = 3.0;
+var middleArmWidth = 0.95;
+var lowerArmWidth = 0.85;
 var headHeight = 4.0;
 var headWidth = 4.0;
 
-var numNodes = 10;
+var numNodes = 4;
 var numAngles = 11;
 var angle = 0;
 
@@ -108,7 +106,8 @@ window.onload = function init() {
 
     instanceMatrix = mat4();
 
-    projectionMatrix = ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+    projectionMatrix = ortho(-20.0, 20.0, -20.0, 20.0, -20.0, 20.0);
+
     modelViewMatrix = mat4();
 
     gl.uniformMatrix4fv(
@@ -151,17 +150,17 @@ window.onload = function init() {
         initNodes(torsoId);
     };
     document.getElementById("slider1").onchange = function () {
-        theta[head1Id] = event.srcElement.value;
-        initNodes(head1Id);
+        theta[upperArmId1] = event.srcElement.value;
+        initNodes(upperArmId1);
     };
 
     document.getElementById("slider2").onchange = function () {
-        theta[leftUpperArmId] = event.srcElement.value;
-        initNodes(leftUpperArmId);
+        theta[torsoId] = event.srcElement.value;
+        initNodes(middleArmId1);
     };
     document.getElementById("slider3").onchange = function () {
-        theta[leftLowerArmId] = event.srcElement.value;
-        initNodes(leftLowerArmId);
+        theta[torsoId] = event.srcElement.value;
+        initNodes(lowerArmId1);
     };
 
     document.getElementById("slider4").onchange = function () {
