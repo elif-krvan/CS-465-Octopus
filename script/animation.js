@@ -45,6 +45,9 @@ var numVertices = 24;
 
 var stack = [];
 var figure = [];
+var keyFrames = [];
+var animationSpeed = 2;
+var animationKeyFrameDivider = 6;
 
 for (var i = 0; i < numNodes; i++)
     figure[i] = createNode(null, null, null, null);
@@ -172,6 +175,82 @@ function setColorArrayForDrawing(colorArray) {
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+}
+
+function handleAnimate() {
+    if (keyFrames.length === 0) {
+        console.log("ERROR: No animation keyframe is saved to animate.");
+        return;
+    }
+
+    var currentKeyFrameIndex = 0;
+
+    const animate = () => {
+        if (currentKeyFrameIndex >= keyFrames.length) {
+            clearInterval(animationInterval);
+            currentKeyFrameIndex = 0;
+            return;
+        }
+        
+        theta = keyFrames[currentKeyFrameIndex];
+        currentKeyFrameIndex++;
+        for (i = 0; i < numNodes; i++) initNodes(i);
+    };
+
+    var animationInterval = setInterval(animate, animationSpeed);
+}
+
+function handleClearKeyframes() {
+    if (keyFrames.length !== 0) { // If keyFrames is not empty
+        keyFrames = [];
+    }
+}
+
+function handleSaveKeyframe() {
+    if (keyFrames.length !== 0) { // If keyFrames is not empty
+        // Store a new keyFrame for each angle of difference between new keyframe
+        var currentKeyFrame = theta.slice();
+        var lastKeyFrame = keyFrames.slice(keyFrames.length - 1)[0];
+
+        // Calculate difference
+        var difference = [];
+        for (var i = 0; i < lastKeyFrame.length; i++) {
+            difference.push(lastKeyFrame[i] - currentKeyFrame[i]);
+        }
+
+        var maxDifferenceInTheta = findAbsoluteMaximumInArray(difference);
+
+        if (maxDifferenceInTheta === 0) {
+            console.log("ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?");
+            return;
+        }
+
+        maxDifferenceInTheta = Math.ceil(maxDifferenceInTheta / animationKeyFrameDivider);
+
+        // Normalize the differences
+        for (var i = 0; i < difference.length; i++) {
+            difference[i] = difference[i] / maxDifferenceInTheta;
+        }
+
+        // Smoothly place keyFrames between each difference in angle
+        for (var j = 0; j < maxDifferenceInTheta; j++) {
+            lastKeyFrame = lastKeyFrame.map((num, index) => num - difference[index]);
+            keyFrames.push(lastKeyFrame);
+        }
+    }
+    else { // else if keyFrames is empty
+        keyFrames.push(theta.slice());
+    }
+}
+
+function findAbsoluteMaximumInArray(array) {
+    var duplicateArray = array.map((num) => Math.abs(num));
+    return Math.max(...duplicateArray.filter(Boolean)); // .filter(Boolean) removes zeros
+}
+
+function findAbsoluteMinimumInArray(array) {
+    var duplicateArray = array.map((num) => Math.abs(num));
+    return Math.min(...duplicateArray.filter(Boolean)); // .filter(Boolean) removes zeros
 }
 
 window.onload = function init() {
@@ -316,6 +395,26 @@ window.onload = function init() {
         pupilsMoveY = event.srcElement.value;
         initNodes(leftEyePupilId);
         initNodes(rightEyePupilId);
+    };
+
+    document.getElementById("save-kf").onclick = function () {
+        console.log("Starting keyframe save...");
+        handleSaveKeyframe();
+        console.log("Keyframe saved.");
+    };
+    document.getElementById("clear-kf-list").onclick = function () {
+        console.log("Starting keyframe clear...");
+        handleClearKeyframes();
+        console.log("Keyframes cleared.");
+    };
+    document.getElementById("run-anim").onclick = function () {
+        console.log("Starting animation...");
+        handleAnimate();
+    };
+    document.getElementById("save-anim").onclick = function () {
+        console.log("-----------");
+        console.log(keyFrames);
+        console.log("-----------");
     };
 
     for (i = 0; i < numNodes; i++) initNodes(i);
