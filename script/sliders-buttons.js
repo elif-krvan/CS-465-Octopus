@@ -8,30 +8,55 @@ var moveYSlider;
 var rotateTorsoXSlider;
 var rotateTorsoYSlider;
 
-var movepupilXSlider;
-var movepupilYSlider;
+var movePupilXSlider;
+var movePupilYSlider;
+
+var animationSpeedSlider;
 
 var armButtonArray = [];
 var activeArmButtonId = 0;
 
+// move variables for the octopus body
+var moveX = 0;
+var moveY = 0;
+
+// move variables for the pupils
+var pupilsMoveX = 0;
+var pupilsMoveY = 0;
+
+// p tags for slide data
 var rotateYP;
 var rotateXP;
+var armUpperP;
+var armMiddleP;
+var armLowerP;
+var pupilXP;
+var pupilYP;
+var moveXP;
+var moveYP;
+var animSpeedP;
+
 const armOffsetForButtonArray = 5;
 
-const selectedBG = "#1eb1d2";
-const normalBG = "#026d8f";
+// arm selection button backgrounds
+const selectedBG = "#2980b9";
+const normalBG = "#3498db";
 
 function initSliders() {
     initSliderText();
 
     moveXSlider = document.getElementById("slider-move-x");
     moveXSlider.onchange = function () {
+        moveXP.innerHTML = this.value;
+
         moveX = this.value;
         initNodes(torsoId);
     };
 
     moveYSlider = document.getElementById("slider-move-y");
-    moveXSlider.onchange = function () {
+    moveYSlider.onchange = function () {
+        moveYP.innerHTML = this.value;
+
         moveY = this.value;
         initNodes(torsoId);
     };
@@ -52,6 +77,8 @@ function initSliders() {
 
     upperArmSlider = document.getElementById("slider-arm-up");
     upperArmSlider.onchange = function () {
+        armUpperP.innerHTML = upperArmSlider.value;
+
         let thetaIndex = convertButtonIndexToThetaArrIndex(activeArmButtonId);
         theta[thetaIndex] = upperArmSlider.value;
         initNodes(thetaIndex);
@@ -59,30 +86,111 @@ function initSliders() {
 
     middleArmSlider = document.getElementById("slider-arm-mid");
     middleArmSlider.onchange = function () {
+        armMiddleP.innerHTML = middleArmSlider.value;
+
         let thetaIndex =
             convertButtonIndexToThetaArrIndex(activeArmButtonId) + 1;
-        theta[thetaIndex] = event.srcElement.value;
+        theta[thetaIndex] = middleArmSlider.value;
         initNodes(thetaIndex);
     };
 
     lowerArmSlider = document.getElementById("slider-arm-low");
     lowerArmSlider.onchange = function () {
+        armLowerP.innerHTML = lowerArmSlider.value;
+
         let thetaIndex =
             convertButtonIndexToThetaArrIndex(activeArmButtonId) + 2;
-        theta[thetaIndex] = event.srcElement.value;
+        theta[thetaIndex] = lowerArmSlider.value;
         initNodes(thetaIndex);
+    };
+
+    movePupilXSlider = document.getElementById("slider-pupil-x");
+    movePupilXSlider.onchange = function () {
+        pupilXP.innerHTML = this.value;
+
+        pupilsMoveX = this.value;
+        initNodes(leftEyePupilId);
+        initNodes(rightEyePupilId);
+    };
+
+    movePupilYSlider = document.getElementById("slider-pupil-y");
+    movePupilYSlider.onchange = function () {
+        pupilYP.innerHTML = this.value;
+
+        pupilsMoveY = this.value;
+        initNodes(leftEyePupilId);
+        initNodes(rightEyePupilId);
+    };
+
+    animationSpeedSlider = document.getElementById("slider-anim-speed");
+    animationSpeedSlider.onchange = function () {
+        animSpeedP.innerHTML = this.value;
+
+        animationSpeed = this.value;
     };
 }
 
 function initSliderText() {
     rotateYP = document.getElementById("text-rotate-y");
     rotateXP = document.getElementById("text-rotate-x");
+
+    armUpperP = document.getElementById("text-up-arm");
+    armMiddleP = document.getElementById("text-mid-arm");
+    armLowerP = document.getElementById("text-low-arm");
+
+    pupilXP = document.getElementById("text-pupil-x");
+    pupilYP = document.getElementById("text-pupil-y");
+
+    moveXP = document.getElementById("text-move-x");
+    moveYP = document.getElementById("text-move-y");
+
+    animSpeedP = document.getElementById("text-anim-speed");
+}
+
+function initAnimationButtonsAndAddEventListeners() {
+    document.getElementById("save-kf").addEventListener("click", () => {
+        console.log("Starting keyframe save...");
+        handleSaveKeyframe();
+        console.log("Keyframe saved.");
+    });
+
+    document.getElementById("clear-kf-list").addEventListener("click", () => {
+        console.log("Starting keyframe clear...");
+        handleClearKeyframes();
+        console.log("Keyframes cleared.");
+    });
+
+    document.getElementById("run-anim").addEventListener("click", () => {
+        console.log("Starting animation...");
+        handleAnimate();
+    });
+
+    document.getElementById("save-anim").addEventListener("click", () => {
+        console.log("-----------");
+        console.log(keyFrames);
+        console.log("-----------");
+    });
+
+    // event listener for the button that clicks the file input
+    document.getElementById("load-anim").addEventListener("click", () => {
+        document.getElementById("octop-input").click();
+    });
+
+    // event listener for the actual file input
+    document
+        .getElementById("octop-input")
+        .addEventListener("change", function () {
+            var selectedFile = this.files[0];
+            loadFile(selectedFile);
+
+            this.value = null;
+        });
 }
 
 function initLegButtonsAndAddEventListeners() {
     for (let i = 0; i < armNumber; ++i) {
         armButtonArray.push(document.getElementById(`arm${i}`));
-        armButtonArray[i].addEventListener("click", function () {
+        armButtonArray[i].addEventListener("click", () => {
             // reset to normal background color
             armButtonArray[activeArmButtonId].style.backgroundColor = normalBG;
 
@@ -99,11 +207,20 @@ function initLegButtonsAndAddEventListeners() {
             upperArmSlider.value = theta[thetaIndex];
             middleArmSlider.value = theta[thetaIndex + 1];
             lowerArmSlider.value = theta[thetaIndex + 2];
+
+            armUpperP.innerHTML = upperArmSlider.value;
+            armMiddleP.innerHTML = middleArmSlider.value;
+            armLowerP.innerHTML = lowerArmSlider.value;
         });
     }
 
     //set initial selected background color
     armButtonArray[activeArmButtonId].style.backgroundColor = selectedBG;
+}
+
+function initButtons() {
+    initLegButtonsAndAddEventListeners();
+    initAnimationButtonsAndAddEventListeners();
 }
 
 function convertButtonIndexToThetaArrIndex(buttonIndex) {
