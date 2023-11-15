@@ -42,3 +42,8 @@
 .arm-sliders {
     margin-left: 20px;
 }
+
+.menu p {
+    display: inline;
+    margin-bottom: 50px;
+}

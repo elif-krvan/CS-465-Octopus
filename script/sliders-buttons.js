@@ -13,12 +13,17 @@ var movepupilYSlider;
 
 var armButtonArray = [];
 var activeArmButtonId = 0;
+
+var rotateYP;
+var rotateXP;
 const armOffsetForButtonArray = 5;
 
 const selectedBG = "#1eb1d2";
 const normalBG = "#026d8f";
 
 function initSliders() {
+    initSliderText();
+
     moveXSlider = document.getElementById("slider-move-x");
     moveXSlider.onchange = function () {
         moveX = this.value;
@@ -33,12 +38,14 @@ function initSliders() {
 
     rotateTorsoXSlider = document.getElementById("slider-rotate-x");
     rotateTorsoXSlider.onchange = function () {
+        rotateXP.innerHTML = this.value;
         theta[torsoIdX] = this.value;
         initNodes(torsoId);
     };
 
     rotateTorsoYSlider = document.getElementById("slider-rotate-y");
     rotateTorsoYSlider.onchange = function () {
+        rotateYP.innerHTML = this.value;
         theta[torsoId] = this.value;
         initNodes(torsoId);
     };
@@ -65,6 +72,11 @@ function initSliders() {
         theta[thetaIndex] = event.srcElement.value;
         initNodes(thetaIndex);
     };
+}
+
+function initSliderText() {
+    rotateYP = document.getElementById("text-rotate-y");
+    rotateXP = document.getElementById("text-rotate-x");
 }
 
 function initLegButtonsAndAddEventListeners() {
