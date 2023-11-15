@@ -355,7 +355,7 @@ window.onload = function init() {
     // Load and bind the texture
     var texture = gl.createTexture();
     var image = new Image();
-    image.src = "./bg.jpg";
+    image.src = "./img/bg.jpg";
     image.onload = function () {
         console.log("loaded image");
         gl.bindTexture(gl.TEXTURE_2D, texture);

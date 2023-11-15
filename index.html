@@ -14,8 +14,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <meta name="description" content="CS465 Assignment 1" />
-        <title>Octopus - CS465 Assignment 2</title>
-        <!-- <link rel = "icon" href = "./icons/icons8-triangle-100.png" type = "image/x-icon">  -->
+        <title>Octop - CS465 Assignment 2</title>
+        <link rel="icon" href="./img/icon.png" type="image/x-icon" />
         <script id="vertex-shader" type="x-shader/x-vertex">
 
             attribute  vec4 vPosition;
@@ -50,13 +50,22 @@
                 gl_FragColor = fColor;
             }
         </script>
-        <script type="text/javascript" src="./webgl-utils.js"></script>
-        <script type="text/javascript" src="./initShaders.js"></script>
-        <script type="text/javascript" src="./MV.js"></script>
-        <script type="text/javascript" src="./const.js"></script>
-        <script type="text/javascript" src="./body_data.js"></script>
-        <script type="text/javascript" src="./node.js"></script>
-        <script type="text/javascript" src="./animation.js"></script>
+        <script
+            type="text/javascript"
+            src="./script/utils/webgl-utils.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./script/utils/initShaders.js"
+        ></script>
+        <script type="text/javascript" src="./script/utils/MV.js"></script>
+        <script type="text/javascript" src="./script/const/const.js"></script>
+        <script
+            type="text/javascript"
+            src="./script/const/body_data.js"
+        ></script>
+        <script type="text/javascript" src="./script/node.js"></script>
+        <script type="text/javascript" src="./script/animation.js"></script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -242,7 +251,7 @@
             <div>
                 <canvas
                     id="gl-canvas"
-                    style="background: url('./bg.jpg')"
+                    style="background: url('./img/bg.jpg')"
                     width="1000"
                     height="1000"
                 >

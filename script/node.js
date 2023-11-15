@@ -339,6 +339,7 @@ function pupil1() {
     );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
 
+    // when we enable cullface weird things happen, weird things happen anyway tho
     gl.enable(gl.DEPTH_TEST);
     // gl.enable(gl.CULL_FACE);
     // gl.frontFace(gl.CCW);
