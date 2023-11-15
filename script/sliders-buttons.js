@@ -2,30 +2,51 @@ var upperArmSlider;
 var middleArmSlider;
 var lowerArmSlider;
 
-// UI related variables
+var moveXSlider;
+var moveYSlider;
+
+var rotateTorsoXSlider;
+var rotateTorsoYSlider;
+
+var movepupilXSlider;
+var movepupilYSlider;
+
 var armButtonArray = [];
 var activeArmButtonId = 0;
 const armOffsetForButtonArray = 5;
 
+const selectedBG = "#1eb1d2";
+const normalBG = "#026d8f";
+
 function initSliders() {
-    document.getElementById("slider-x").onchange = function () {
-        moveX = event.srcElement.value;
-        initNodes(torsoId);
-    };
-    document.getElementById("slider-y").onchange = function () {
-        moveY = event.srcElement.value;
+    moveXSlider = document.getElementById("slider-move-x");
+    moveXSlider.onchange = function () {
+        moveX = this.value;
         initNodes(torsoId);
     };
 
-    document.getElementById("slider0").onchange = function () {
-        theta[torsoId] = event.srcElement.value;
+    moveYSlider = document.getElementById("slider-move-y");
+    moveXSlider.onchange = function () {
+        moveY = this.value;
+        initNodes(torsoId);
+    };
+
+    rotateTorsoXSlider = document.getElementById("slider-rotate-x");
+    rotateTorsoXSlider.onchange = function () {
+        theta[torsoIdX] = this.value;
+        initNodes(torsoId);
+    };
+
+    rotateTorsoYSlider = document.getElementById("slider-rotate-y");
+    rotateTorsoYSlider.onchange = function () {
+        theta[torsoId] = this.value;
         initNodes(torsoId);
     };
 
     upperArmSlider = document.getElementById("slider-arm-up");
     upperArmSlider.onchange = function () {
         let thetaIndex = convertButtonIndexToThetaArrIndex(activeArmButtonId);
-        theta[thetaIndex] = event.srcElement.value;
+        theta[thetaIndex] = upperArmSlider.value;
         initNodes(thetaIndex);
     };
 
@@ -50,8 +71,16 @@ function initLegButtonsAndAddEventListeners() {
     for (let i = 0; i < armNumber; ++i) {
         armButtonArray.push(document.getElementById(`arm${i}`));
         armButtonArray[i].addEventListener("click", function () {
+            // reset to normal background color
+            armButtonArray[activeArmButtonId].style.backgroundColor = normalBG;
+
             activeArmButtonId = i;
 
+            // change selected button's background color
+            armButtonArray[activeArmButtonId].style.backgroundColor =
+                selectedBG;
+
+            // find theta index and update slider values with the active legs last values
             let thetaIndex =
                 convertButtonIndexToThetaArrIndex(activeArmButtonId);
 
@@ -60,6 +89,9 @@ function initLegButtonsAndAddEventListeners() {
             lowerArmSlider.value = theta[thetaIndex + 2];
         });
     }
+
+    //set initial selected background color
+    armButtonArray[activeArmButtonId].style.backgroundColor = selectedBG;
 }
 
 function convertButtonIndexToThetaArrIndex(buttonIndex) {

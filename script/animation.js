@@ -307,18 +307,6 @@ window.onload = function init() {
     initSliders();
     initLegButtonsAndAddEventListeners();
 
-    document.getElementById("slider4").onchange = function () {
-        theta[upperArmId2] = event.srcElement.value;
-        initNodes(upperArmId2);
-    };
-    document.getElementById("slider5").onchange = function () {
-        theta[middleArmId2] = event.srcElement.value;
-        initNodes(middleArmId2);
-    };
-    document.getElementById("slider6").onchange = function () {
-        theta[lowerArmId2] = event.srcElement.value;
-        initNodes(lowerArmId2);
-    };
     document.getElementById("slider7").onchange = function () {
         pupilsMoveX = event.srcElement.value;
         initNodes(leftEyePupilId);

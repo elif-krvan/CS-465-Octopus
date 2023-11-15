@@ -97,10 +97,10 @@
                     <button class="arm-btn" id="arm7">8</button>
                 </div>
                 <div class="arm-sliders">
-                    <div id="slider0">
-                        torso angle -180
+                    <div id="slider-rotate-yy">
+                        Rotate torso along Y axis
                         <input
-                            id="slide"
+                            id="slider-rotate-y"
                             type="range"
                             min="-180"
                             max="180"
@@ -110,10 +110,10 @@
                         180
                     </div>
                     <br />
-                    <div id="slider-arm-up">
-                        Upper Arm Angle
+                    <div id="slider-rotate-xx">
+                        Rotate torso along X axis
                         <input
-                            id="slide"
+                            id="slider-rotate-x"
                             type="range"
                             min="-180"
                             max="180"
@@ -121,13 +121,25 @@
                             value="0"
                         />
                         180
+                    </div>
+                    <br />
+                    <div id="slider-arm-upp">
+                        Upper Arm Angle
+                        <input
+                            id="slider-arm-up"
+                            type="range"
+                            min="-180"
+                            max="180"
+                            step="10"
+                            value="0"
+                        />
                     </div>
                     <br />
 
-                    <div id="slider-arm-mid">
+                    <div id="slider-arm-midd">
                         Middle Arm Angle
                         <input
-                            id="slide"
+                            id="slider-arm-mid"
                             type="range"
                             min="-180"
                             max="180"
@@ -137,10 +149,10 @@
                         180
                     </div>
                     <br />
-                    <div id="slider-arm-low">
+                    <div id="slider-arm-loww">
                         Lower Arm Angle
                         <input
-                            id="slide"
+                            id="slider-arm-low"
                             type="range"
                             min="-180"
                             max="180"
@@ -149,50 +161,11 @@
                         />
                         180
                     </div>
-                    <br />
-                    <div id="slider4">
-                        Upper Arm Angle
-                        <input
-                            id="slide"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        180
-                    </div>
-                    <br />
-                    <div id="slider5">
-                        Middle Arm Angle
-                        <input
-                            id="slide"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        180
-                    </div>
-                    <br />
-                    <div id="slider6">
-                        Lower Arm Angle
-                        <input
-                            id="slide"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        180
-                    </div>
-                    <br />
+
                     <div id="slider7">
                         Move pupils along X axis
                         <input
-                            id="slide"
+                            id="slider-pupil-x"
                             type="range"
                             min="-0.9"
                             max="0.9"
@@ -205,25 +178,11 @@
                     <div id="slider8">
                         Move pupils along Y axis
                         <input
-                            id="slide"
+                            id="slider-pupil-y"
                             type="range"
                             min="-0.9"
                             max="0.9"
                             step="0.2"
-                            value="0"
-                        />
-                        180
-                    </div>
-                    <br />
-
-                    <div id="slider9">
-                        right lower leg angle -180
-                        <input
-                            id="slide"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
                             value="0"
                         />
                         180
@@ -234,7 +193,7 @@
                     <div id="slider-x">
                         Move along the x direction
                         <input
-                            id="slide"
+                            id="slider-move-x"
                             type="range"
                             min="-20"
                             max="20"
@@ -247,7 +206,7 @@
                     <div id="slider-y">
                         Move Along the y direction
                         <input
-                            id="slide"
+                            id="slider-move-y"
                             type="range"
                             min="-20"
                             max="20"

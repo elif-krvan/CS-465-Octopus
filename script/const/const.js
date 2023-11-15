@@ -1,4 +1,5 @@
 const torsoId = 0;
+const torsoIdX = 1;
 
 const leftEyeId = 1;
 const rightEyeId = 2;
