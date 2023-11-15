@@ -70,8 +70,29 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div class="App">
+            <div>
+                <canvas
+                    id="gl-canvas"
+                    style="background: url('./img/bg.jpg')"
+                    width="700"
+                    height="700"
+                >
+                    Oops ... your browser doesn't support the HTML5 canvas
+                    element
+                </canvas>
+            </div>
             <div class="menu">
-                <div id="arm-sliders">
+                <div class="arm-select-menu">
+                    <button class="arm-btn" id="arm1">1</button>
+                    <button class="arm-btn" id="arm2">2</button>
+                    <button class="arm-btn" id="arm3">3</button>
+                    <button class="arm-btn" id="arm4">4</button>
+                    <button class="arm-btn" id="arm5">5</button>
+                    <button class="arm-btn" id="arm6">6</button>
+                    <button class="arm-btn" id="arm7">7</button>
+                    <button class="arm-btn" id="arm8">8</button>
+                </div>
+                <div class="arm-sliders">
                     <div id="slider0">
                         torso angle -180
                         <input
@@ -246,18 +267,6 @@
                         180
                     </div>
                 </div>
-            </div>
-
-            <div>
-                <canvas
-                    id="gl-canvas"
-                    style="background: url('./img/bg.jpg')"
-                    width="1000"
-                    height="1000"
-                >
-                    Oops ... your browser doesn't support the HTML5 canvas
-                    element
-                </canvas>
             </div>
         </div>
     </body>

@@ -90,14 +90,14 @@ function initNodes(Id) {
         case leftEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(-(torsoWidth / 2 - 0.4), 0.0, torsoWidth / 1.5);
+            m = translate(-(torsoWidth / 2.5), 0.0, torsoWidth / 1.5);
 
             figure[leftEyeId] = createNode(m, eye1, rightEyeId, leftEyePupilId);
             break;
         case rightEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(torsoWidth / 2 - 0.4, 0.0, torsoWidth / 1.5);
+            m = translate(torsoWidth / 2.5, 0.0, torsoWidth / 1.5);
 
             figure[rightEyeId] = createNode(
                 m,
@@ -109,11 +109,7 @@ function initNodes(Id) {
         case leftEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(
-                -(torsoWidth / 2 - 2.0),
-                0.0,
-                (torsoWidth + eyeSize / 1.5) / 4
-            );
+            m = translate(0, 0.0, (torsoWidth + eyeSize / 1.5) / 4);
             m = mult(m, translate(pupilsMoveX, pupilsMoveY, 0.0));
 
             figure[leftEyePupilId] = createNode(
@@ -126,11 +122,7 @@ function initNodes(Id) {
         case rightEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(
-                torsoWidth / 2 - 2.0,
-                0.0,
-                (torsoWidth + eyeSize / 1.5) / 4
-            );
+            m = translate(0, 0.0, (torsoWidth + eyeSize / 1.5) / 4);
             m = mult(m, translate(pupilsMoveX, pupilsMoveY, 0.0));
 
             figure[rightEyePupilId] = createNode(
