@@ -46,7 +46,8 @@ var numVertices = 24;
 var stack = [];
 var figure = [];
 var keyFrames = [];
-var animationSpeed = 0.002;
+var animationSpeed = 2;
+var animationKeyFrameDivider = 6;
 
 for (var i = 0; i < numNodes; i++)
     figure[i] = createNode(null, null, null, null);
@@ -223,6 +224,8 @@ function handleSaveKeyframe() {
             console.log("ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?");
             return;
         }
+
+        maxDifferenceInTheta = Math.ceil(maxDifferenceInTheta / animationKeyFrameDivider);
 
         // Normalize the differences
         for (var i = 0; i < difference.length; i++) {
