@@ -253,6 +253,33 @@ function findAbsoluteMinimumInArray(array) {
     return Math.min(...duplicateArray.filter(Boolean)); // .filter(Boolean) removes zeros
 }
 
+function loadFile(file) {
+    if (file) {
+        console.log("me likes reading file");
+        var reader = new FileReader();
+
+        // Callback function to run after the file is read
+        reader.onload = function (event) {
+            var jsonContent = event.target.result;
+
+            // Parse the JSON data
+            try {
+                var jsonData = JSON.parse(jsonContent);
+
+                // set data
+
+                render();
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+            }
+        };
+
+        // Read the file
+        reader.readAsText(file);
+        render();
+    }
+}
+
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
 
@@ -360,7 +387,6 @@ window.onload = function init() {
     var image = new Image();
     image.src = "./img/bg.jpg";
     image.onload = function () {
-        console.log("loaded image");
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texImage2D(
             gl.TEXTURE_2D,
@@ -377,14 +403,14 @@ window.onload = function init() {
         var textureLocation = gl.getUniformLocation(program, "u_texture");
         gl.uniform1i(textureLocation, 0);
 
-        // Render the scene
+        // Set the color as transparent
         gl.clearColor(0.0, 0.0, 0.0, 0.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.TRIANGLES, 0, 8);
     };
 
     initSliders();
-    initLegButtonsAndAddEventListeners();
+    initButtons();
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 

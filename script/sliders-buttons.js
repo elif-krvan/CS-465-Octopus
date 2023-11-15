@@ -128,27 +128,6 @@ function initSliders() {
 
         animationSpeed = this.value;
     };
-    // animation related sliders
-    document.getElementById("save-kf").onclick = function () {
-        console.log("Starting keyframe save...");
-        handleSaveKeyframe();
-        console.log("Keyframe saved.");
-    };
-    document.getElementById("clear-kf-list").onclick = function () {
-        console.log("Starting keyframe clear...");
-        handleClearKeyframes();
-        console.log("Keyframes cleared.");
-    };
-    document.getElementById("run-anim").onclick = function () {
-        console.log("Starting animation...");
-        handleAnimate();
-    };
-
-    document.getElementById("save-anim").onclick = function () {
-        console.log("-----------");
-        console.log(keyFrames);
-        console.log("-----------");
-    };
 }
 
 function initSliderText() {
@@ -168,10 +147,50 @@ function initSliderText() {
     animSpeedP = document.getElementById("text-anim-speed");
 }
 
+function initAnimationButtonsAndAddEventListeners() {
+    document.getElementById("save-kf").addEventListener("click", () => {
+        console.log("Starting keyframe save...");
+        handleSaveKeyframe();
+        console.log("Keyframe saved.");
+    });
+
+    document.getElementById("clear-kf-list").addEventListener("click", () => {
+        console.log("Starting keyframe clear...");
+        handleClearKeyframes();
+        console.log("Keyframes cleared.");
+    });
+
+    document.getElementById("run-anim").addEventListener("click", () => {
+        console.log("Starting animation...");
+        handleAnimate();
+    });
+
+    document.getElementById("save-anim").addEventListener("click", () => {
+        console.log("-----------");
+        console.log(keyFrames);
+        console.log("-----------");
+    });
+
+    // event listener for the button that clicks the file input
+    document.getElementById("load-anim").addEventListener("click", () => {
+        document.getElementById("octop-input").click();
+    });
+
+    // event listener for the actual file input
+    document
+        .getElementById("octop-input")
+        .addEventListener("change", function () {
+            var selectedFile = this.files[0];
+            loadFile(selectedFile);
+
+            this.value = null;
+        });
+}
+
 function initLegButtonsAndAddEventListeners() {
     for (let i = 0; i < armNumber; ++i) {
         armButtonArray.push(document.getElementById(`arm${i}`));
-        armButtonArray[i].addEventListener("click", function () {
+        armButtonArray[i].addEventListener("click", () => {
             // reset to normal background color
             armButtonArray[activeArmButtonId].style.backgroundColor = normalBG;
 
@@ -197,6 +216,11 @@ function initLegButtonsAndAddEventListeners() {
 
     //set initial selected background color
     armButtonArray[activeArmButtonId].style.backgroundColor = selectedBG;
+}
+
+function initButtons() {
+    initLegButtonsAndAddEventListeners();
+    initAnimationButtonsAndAddEventListeners();
 }
 
 function convertButtonIndexToThetaArrIndex(buttonIndex) {
