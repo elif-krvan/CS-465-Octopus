@@ -90,14 +90,14 @@ function initNodes(Id) {
         case leftEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(-(torsoWidth / 2 - 0.5), 0.0, torsoWidth / 2);
+            m = translate(-(torsoWidth / 2 - 0.4), 0.0, torsoWidth / 1.5);
 
             figure[leftEyeId] = createNode(m, eye1, rightEyeId, leftEyePupilId);
             break;
         case rightEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(torsoWidth / 2 - 0.5, 0.0, torsoWidth / 2);
+            m = translate(torsoWidth / 2 - 0.4, 0.0, torsoWidth / 1.5);
 
             figure[rightEyeId] = createNode(
                 m,
@@ -109,7 +109,12 @@ function initNodes(Id) {
         case leftEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 3);
+            m = translate(
+                -(torsoWidth / 2 - 2.0),
+                0.0,
+                (torsoWidth + eyeSize / 1.5) / 4
+            );
+            m = mult(m, translate(pupilsMoveX, pupilsMoveY, 0.0));
 
             figure[leftEyePupilId] = createNode(
                 m,
@@ -121,7 +126,12 @@ function initNodes(Id) {
         case rightEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 3);
+            m = translate(
+                torsoWidth / 2 - 2.0,
+                0.0,
+                (torsoWidth + eyeSize / 1.5) / 4
+            );
+            m = mult(m, translate(pupilsMoveX, pupilsMoveY, 0.0));
 
             figure[rightEyePupilId] = createNode(
                 m,
@@ -253,17 +263,29 @@ function traverse(Id) {
 
 function torso() {
     // set color and vertex array
-    setColorArrayForDrawing(colorsArray);
-    setArrayForDrawing(pointsArray);
+    // setColorArrayForDrawing(colorsArray);
+    // setArrayForDrawing(pointsArray);
 
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0, 0.0));
+    // instanceMatrix = mult(modelViewMatrix, translate(0.0, 0, 0.0));
+    // instanceMatrix = mult(
+    //     instanceMatrix,
+    //     scale4(torsoWidth, torsoHeight, torsoWidth)
+    // );
+
+    // gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    // for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+
+    setColorArrayForDrawing(octopusHeadColorsArray);
+    setArrayForDrawing(sphereArray);
+
+    // scale the sphere to the pupil size
     instanceMatrix = mult(
-        instanceMatrix,
+        modelViewMatrix,
         scale4(torsoWidth, torsoHeight, torsoWidth)
     );
-
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
-    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, sphereArray.length);
 }
 
 function eye1() {
@@ -317,11 +339,16 @@ function pupil1() {
     );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
 
+    gl.enable(gl.DEPTH_TEST);
+    // gl.enable(gl.CULL_FACE);
+    // gl.frontFace(gl.CCW);
+
     gl.drawArrays(gl.TRIANGLE_FAN, 0, sphereArray.length);
 }
 
 function upperArm1() {
-    setColorArrayForDrawing(colorsArray);
+    setColorArrayForDrawing(octopusArmsColorArray);
+    setArrayForDrawing(pointsArray);
 
     var translateY = (upperArmHeight + torsoHeight) / 2;
 
@@ -335,7 +362,8 @@ function upperArm1() {
 }
 
 function middleArm1() {
-    setColorArrayForDrawing(colorsArray);
+    setColorArrayForDrawing(octopusArmsColorArray);
+    setArrayForDrawing(pointsArray);
 
     var translateY = (middleArmHeight + torsoHeight) / 2 + upperArmHeight;
 
@@ -349,7 +377,8 @@ function middleArm1() {
 }
 
 function lowerArm1() {
-    setColorArrayForDrawing(colorsArray);
+    setColorArrayForDrawing(octopusArmsColorArray);
+    setArrayForDrawing(pointsArray);
 
     var translateY =
         (torsoHeight + lowerArmHeight) / 2 + middleArmHeight + upperArmHeight;

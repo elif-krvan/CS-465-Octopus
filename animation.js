@@ -24,8 +24,14 @@ var numAngles = 11;
 var angle = 0;
 
 var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+// move variables for the octopus body
 var moveX = 0;
 var moveY = 0;
+
+// move variables for the pupils
+var pupilsMoveX = 0;
+var pupilsMoveY = 0;
 
 var canvasWidth;
 var canvasHeight;
@@ -34,10 +40,9 @@ var octopusColor = vec4(0.831, 0.373, 0.349, 1.0);
 var eyeColor = vec4(1.0, 1.0, 1.0, 1.0);
 var pupilColor = vec4(0.0, 0.0, 0.0, 1.0);
 
-var numVertices = 4;
+var numVertices = 24;
 
 var stack = [];
-
 var figure = [];
 
 for (var i = 0; i < numNodes; i++)
@@ -52,7 +57,6 @@ var eyeBuffer;
 var eyeColorBuffer;
 
 var vTexCoord;
-
 var textureObj;
 
 var modelViewLoc;
@@ -60,15 +64,13 @@ var modelViewLoc;
 var pointsArray = [];
 var eyesArray = [];
 
-var colorsArray = [];
+var octopusArmsColorArray = [];
+var octopusHeadColorsArray = [];
 var eyeColorsArray = [];
 var pupilColorsArray = [];
 
 var sphereArray = [];
 var sphereIndexArray = [];
-
-var vertexPositionData = [];
-var indexData = [];
 
 //-------------------------------------------
 
@@ -88,10 +90,10 @@ function quad(a, b, c, d) {
     pointsArray.push(vertices[c]);
     pointsArray.push(vertices[d]);
 
-    colorsArray.push(octopusColor);
-    colorsArray.push(octopusColor);
-    colorsArray.push(octopusColor);
-    colorsArray.push(octopusColor);
+    octopusArmsColorArray.push(octopusColor);
+    octopusArmsColorArray.push(octopusColor);
+    octopusArmsColorArray.push(octopusColor);
+    octopusArmsColorArray.push(octopusColor);
 }
 
 function cube() {
@@ -183,10 +185,12 @@ function cube() {
 
 function sphere() {
     const radius = 1.0;
-    const latitudeBands = 300;
-    const longitudeBands = 300;
+    const latitudeBands = 400;
+    // const latitudeBands = 200;
+    const longitudeBands = 400;
 
     for (var lat = 0; lat < latitudeBands; lat++) {
+        // for (var lat = 0; lat < latitudeBands / 2; lat++) {
         var theta = (lat * Math.PI) / latitudeBands;
         var sinTheta = Math.sin(theta);
         var cosTheta = Math.cos(theta);
@@ -201,6 +205,8 @@ function sphere() {
             var z = radius * sinPhi * sinTheta;
 
             sphereArray.push(vec4(x, y, z, 1.0));
+
+            octopusHeadColorsArray.push(octopusColor);
             eyeColorsArray.push(eyeColor);
             pupilColorsArray.push(pupilColor);
         }
@@ -308,7 +314,11 @@ window.onload = function init() {
 
     // color buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        flatten(octopusArmsColorArray),
+        gl.STATIC_DRAW
+    );
 
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
@@ -410,20 +420,14 @@ window.onload = function init() {
         initNodes(lowerArmId2);
     };
     document.getElementById("slider7").onchange = function () {
-        theta[leftLowerLegId] = event.srcElement.value;
-        initNodes(leftLowerLegId);
+        pupilsMoveX = event.srcElement.value;
+        initNodes(leftEyePupilId);
+        initNodes(rightEyePupilId);
     };
     document.getElementById("slider8").onchange = function () {
-        theta[rightUpperLegId] = event.srcElement.value;
-        initNodes(rightUpperLegId);
-    };
-    document.getElementById("slider9").onchange = function () {
-        theta[rightLowerLegId] = event.srcElement.value;
-        initNodes(rightLowerLegId);
-    };
-    document.getElementById("slider10").onchange = function () {
-        theta[head2Id] = event.srcElement.value;
-        initNodes(head2Id);
+        pupilsMoveY = event.srcElement.value;
+        initNodes(leftEyePupilId);
+        initNodes(rightEyePupilId);
     };
 
     for (i = 0; i < numNodes; i++) initNodes(i);

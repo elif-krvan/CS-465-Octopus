@@ -1,5 +1,5 @@
-const torsoHeight = 5.0;
-const torsoWidth = 5.0;
+const torsoHeight = 4.0;
+const torsoWidth = 4.0;
 const upperArmHeight = 6.0;
 const middleArmHeight = 6.0;
 const lowerArmHeight = 3.0;
@@ -9,4 +9,4 @@ const lowerArmWidth = 0.85;
 const headHeight = 4.0;
 const headWidth = 4.0;
 const eyeSize = 1.75;
-const pupilSize = 0.75;
+const pupilSize = 0.65;
