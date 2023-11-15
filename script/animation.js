@@ -26,14 +26,6 @@ const armNumber = 8;
 
 var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-// move variables for the octopus body
-var moveX = 0;
-var moveY = 0;
-
-// move variables for the pupils
-var pupilsMoveX = 0;
-var pupilsMoveY = 0;
-
 var canvasWidth;
 var canvasHeight;
 
@@ -191,7 +183,7 @@ function handleAnimate() {
             currentKeyFrameIndex = 0;
             return;
         }
-        
+
         theta = keyFrames[currentKeyFrameIndex];
         currentKeyFrameIndex++;
         for (i = 0; i < numNodes; i++) initNodes(i);
@@ -201,13 +193,15 @@ function handleAnimate() {
 }
 
 function handleClearKeyframes() {
-    if (keyFrames.length !== 0) { // If keyFrames is not empty
+    if (keyFrames.length !== 0) {
+        // If keyFrames is not empty
         keyFrames = [];
     }
 }
 
 function handleSaveKeyframe() {
-    if (keyFrames.length !== 0) { // If keyFrames is not empty
+    if (keyFrames.length !== 0) {
+        // If keyFrames is not empty
         // Store a new keyFrame for each angle of difference between new keyframe
         var currentKeyFrame = theta.slice();
         var lastKeyFrame = keyFrames.slice(keyFrames.length - 1)[0];
@@ -221,11 +215,15 @@ function handleSaveKeyframe() {
         var maxDifferenceInTheta = findAbsoluteMaximumInArray(difference);
 
         if (maxDifferenceInTheta === 0) {
-            console.log("ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?");
+            console.log(
+                "ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?"
+            );
             return;
         }
 
-        maxDifferenceInTheta = Math.ceil(maxDifferenceInTheta / animationKeyFrameDivider);
+        maxDifferenceInTheta = Math.ceil(
+            maxDifferenceInTheta / animationKeyFrameDivider
+        );
 
         // Normalize the differences
         for (var i = 0; i < difference.length; i++) {
@@ -234,11 +232,13 @@ function handleSaveKeyframe() {
 
         // Smoothly place keyFrames between each difference in angle
         for (var j = 0; j < maxDifferenceInTheta; j++) {
-            lastKeyFrame = lastKeyFrame.map((num, index) => num - difference[index]);
+            lastKeyFrame = lastKeyFrame.map(
+                (num, index) => num - difference[index]
+            );
             keyFrames.push(lastKeyFrame);
         }
-    }
-    else { // else if keyFrames is empty
+    } else {
+        // else if keyFrames is empty
         keyFrames.push(theta.slice());
     }
 }
@@ -385,37 +385,6 @@ window.onload = function init() {
 
     initSliders();
     initLegButtonsAndAddEventListeners();
-
-    document.getElementById("slider7").onchange = function () {
-        pupilsMoveX = event.srcElement.value;
-        initNodes(leftEyePupilId);
-        initNodes(rightEyePupilId);
-    };
-    document.getElementById("slider8").onchange = function () {
-        pupilsMoveY = event.srcElement.value;
-        initNodes(leftEyePupilId);
-        initNodes(rightEyePupilId);
-    };
-
-    document.getElementById("save-kf").onclick = function () {
-        console.log("Starting keyframe save...");
-        handleSaveKeyframe();
-        console.log("Keyframe saved.");
-    };
-    document.getElementById("clear-kf-list").onclick = function () {
-        console.log("Starting keyframe clear...");
-        handleClearKeyframes();
-        console.log("Keyframes cleared.");
-    };
-    document.getElementById("run-anim").onclick = function () {
-        console.log("Starting animation...");
-        handleAnimate();
-    };
-    document.getElementById("save-anim").onclick = function () {
-        console.log("-----------");
-        console.log(keyFrames);
-        console.log("-----------");
-    };
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 
