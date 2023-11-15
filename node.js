@@ -63,8 +63,6 @@ function initNodes(Id) {
             console.log("Y", moveY);
             m = translate(moveX, moveY, 0.0);
             m = mult(m, rotate(theta[torsoId], 0, 1, 0));
-            // m = mult(m, rotate(-90, 0, 1, 0));
-            m = rotate(theta[torsoId], 0, 1, 0);
             figure[torsoId] = createNode(m, torso, null, [
                 upperArmId1,
                 upperArmId2,
