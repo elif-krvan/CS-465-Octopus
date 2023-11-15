@@ -245,6 +245,11 @@ function findAbsoluteMaximumInArray(array) {
     return Math.max(...duplicateArray.filter(Boolean)); // .filter(Boolean) removes zeros
 }
 
+function findAbsoluteMinimumInArray(array) {
+    var duplicateArray = array.map((num) => Math.abs(num));
+    return Math.min(...duplicateArray.filter(Boolean)); // .filter(Boolean) removes zeros
+}
+
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
 
