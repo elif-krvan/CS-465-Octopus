@@ -30,7 +30,7 @@ var lowerArmWidth = 0.85;
 var headHeight = 4.0;
 var headWidth = 4.0;
 
-var numNodes = 7;
+var numNodes = 9;
 var numAngles = 11;
 var angle = 0;
 
@@ -42,6 +42,7 @@ var canvasWidth;
 var canvasHeight;
 
 var octopusColor = vec4(0.831, 0.373, 0.349, 1.0);
+var eyeColor = vec4(1.0, 1.0, 1.0, 1.0);
 
 var numVertices = 4;
 
@@ -56,6 +57,9 @@ var vBuffer;
 var cBuffer;
 var bgBuffer;
 
+var eyeBuffer;
+var eyeColorBuffer;
+
 var vTexCoord;
 
 var textureObj;
@@ -64,6 +68,9 @@ var modelViewLoc;
 
 var pointsArray = [];
 var colorsArray = [];
+
+var eyesArray = [];
+var eyeColorsArray = [];
 
 //-------------------------------------------
 
@@ -97,6 +104,38 @@ function cube() {
     quad(6, 5, 1, 2);
     quad(4, 5, 6, 7);
     quad(5, 4, 0, 1);
+}
+
+function eye() {
+    // Define the sphere geometry
+    const latitudeBands = 30;
+    const longitudeBands = 30;
+
+    for (let lat = 0; lat <= latitudeBands; lat++) {
+        const theta = (lat * Math.PI) / latitudeBands;
+        const sinTheta = Math.sin(theta);
+        const cosTheta = Math.cos(theta);
+
+        for (let lon = 0; lon <= longitudeBands; lon++) {
+            const phi = (lon * 2 * Math.PI) / longitudeBands;
+            const sinPhi = Math.sin(phi);
+            const cosPhi = Math.cos(phi);
+
+            const x = cosPhi * sinTheta;
+            const y = cosTheta;
+            const z = sinPhi * sinTheta;
+
+            eyesArray.push(x, y, z);
+            eyeColorsArray.push(eyeColor);
+        }
+    }
+
+    // gl.bindBuffer(gl.ARRAY_BUFFER, eyeBuffer);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+    // const position = gl.getAttribLocation(shaderProgram, 'vPosition');
+    // gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 0, 0);
+    // gl.enableVertexAttribArray(position);
 }
 
 window.onload = function init() {
@@ -144,10 +183,13 @@ window.onload = function init() {
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
 
     cube();
+    eye();
 
     vBuffer = gl.createBuffer();
     cBuffer = gl.createBuffer();
     bgBuffer = gl.createBuffer();
+    eyeBuffer = gl.createBuffer();
+    eyeColorBuffer = gl.createBuffer();
 
     // vertices buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
@@ -164,6 +206,13 @@ window.onload = function init() {
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+
+    // eye buffer set up
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(eyesArray), gl.STATIC_DRAW);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(eyeColorsArray), gl.STATIC_DRAW);
 
     // background color set up
     gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);

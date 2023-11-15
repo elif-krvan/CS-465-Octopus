@@ -63,10 +63,13 @@ function initNodes(Id) {
             console.log("Y", moveY);
             m = translate(moveX, moveY, 0.0);
             m = mult(m, rotate(theta[torsoId], 0, 1, 0));
-            // m = rotate(theta[torsoId], 0, 1, 0);
+            // m = mult(m, rotate(-90, 0, 1, 0));
+            m = rotate(theta[torsoId], 0, 1, 0);
             figure[torsoId] = createNode(m, torso, null, [
                 upperArmId1,
                 upperArmId2,
+                leftEyeId,
+                rightEyeId,
                 // upperArmId3,
                 // upperArmId4,
                 // upperArmId5,
@@ -86,6 +89,22 @@ function initNodes(Id) {
         //     figure[headId] = createNode(m, head, leftUpperArmId, null);
         //     break;
 
+        case leftEyeId:
+            // var translateX = (torsoWidth - upperArmWidth) / 2;
+            console.log("eye");
+            // something went wrong if octopus placement is changed since we did not set y position
+            m = translate(-(torsoWidth / 2 - 0.5), 0.0, torsoWidth / 2);
+
+            figure[leftEyeId] = createNode(m, eye1, rightEyeId, null);
+            break;
+        case rightEyeId:
+            // var translateX = (torsoWidth - upperArmWidth) / 2;
+            console.log("eye111");
+            // something went wrong if octopus placement is changed since we did not set y position
+            m = translate(torsoWidth / 2 - 0.5, 0.0, torsoWidth / 2);
+
+            figure[rightEyeId] = createNode(m, eye1, leftEyeId, null);
+            break;
         case upperArmId1:
             var translateX = (torsoWidth - upperArmWidth) / 2;
             setUpperArmProperties(
@@ -203,38 +222,68 @@ function traverse(Id) {
 
     modelViewMatrix = stack.pop();
 
-    if (figure[Id].sibling != null) traverse(figure[Id].sibling);
+    // how to use sibling???
+    // if (figure[Id].sibling != null) traverse(figure[Id].sibling);
 }
 
 function torso() {
+    // make sure that eye color array is filled with color vectors
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
+
+    // Use the eyeColorBuffer for the colors
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
+
     instanceMatrix = mult(modelViewMatrix, translate(0.0, 0, 0.0));
     instanceMatrix = mult(
         instanceMatrix,
         scale4(torsoWidth, torsoHeight, torsoWidth)
     );
 
-    gl.uniform4fv(
-        gl.getUniformLocation(program, "vColor"),
-        flatten(vec4(1.0, 1.0, 0.0, 1.0))
-    );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
-// function head() {
-//     instanceMatrix = mult(
-//         modelViewMatrix,
-//         translate(0.0, 0.5 * headHeight, 0.0)
-//     );
-//     instanceMatrix = mult(
-//         instanceMatrix,
-//         scale4(headWidth, headHeight, headWidth)
-//     );
-//     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
-//     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
-// }
+function eye1() {
+    // make sure that eye color array is filled with color vectors
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(eyeColorsArray), gl.STATIC_DRAW);
+
+    // Use the eyeColorBuffer for the colors
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
+    // var translateY = (upperArmHeight + torsoHeight) / 2;
+
+    // instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
+    instanceMatrix = mult(modelViewMatrix, scale4(2.0, 2.0, 2.0));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+
+    // Draw using the updated colorsArray
+    for (var i = 0; i < 6; i++) {
+        gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+    }
+}
 
 function upperArm1() {
+    colorsArray.forEach((c) => {
+        c[0] = octopusColor[0];
+        c[1] = octopusColor[1];
+        c[2] = octopusColor[2];
+        c[3] = octopusColor[3];
+    });
+
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
+
     var translateY = (upperArmHeight + torsoHeight) / 2;
 
     instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
