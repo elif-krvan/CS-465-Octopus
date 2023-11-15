@@ -112,7 +112,7 @@ function initNodes(Id) {
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             console.log("pup");
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 2);
+            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 4);
 
             figure[leftEyePupilId] = createNode(
                 m,
@@ -125,7 +125,7 @@ function initNodes(Id) {
             // var translateX = (torsoWidth - upperArmWidth) / 2;
             console.log("pup");
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 2);
+            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 4);
 
             figure[rightEyePupilId] = createNode(
                 m,
