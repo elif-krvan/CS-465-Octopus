@@ -11,7 +11,7 @@ function createNode(transform, render, sibling, child) {
 }
 
 function setUpperArmProperties(xPosition, armId, middleArmId, armFcn) {
-    console.log("node1");
+    // console.log("node1");
     var rotatePointY = torsoHeight / 2;
 
     // translating x position at this step, also traslates child arms
@@ -29,7 +29,7 @@ function setUpperArmProperties(xPosition, armId, middleArmId, armFcn) {
 }
 
 function setMiddleArmProperties(armId, lowerArmId, armFcn) {
-    console.log("middle");
+    // console.log("middle");
     var rotatePointY = torsoHeight / 2 + upperArmHeight;
 
     m = translate(0, -rotatePointY, 0.0);
@@ -42,7 +42,7 @@ function setMiddleArmProperties(armId, lowerArmId, armFcn) {
 }
 
 function setLowerArmProperties(armId, armFcn) {
-    console.log("lower");
+    // console.log("lower");
     var rotatePointY = torsoHeight / 2 + middleArmHeight + upperArmHeight;
 
     m = translate(0.0, -rotatePointY, 0.0);
@@ -59,8 +59,8 @@ function initNodes(Id) {
 
     switch (Id) {
         case torsoId:
-            console.log("X", moveX);
-            console.log("Y", moveY);
+            // console.log("X", moveX);
+            // console.log("Y", moveY);
             m = translate(moveX, moveY, 0.0);
             m = mult(m, rotate(theta[torsoId], 0, 1, 0));
             figure[torsoId] = createNode(m, torso, null, [

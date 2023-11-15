@@ -46,7 +46,7 @@ var numVertices = 24;
 var stack = [];
 var figure = [];
 var keyFrames = [];
-var animationSpeed = 20;
+var animationSpeed = 0.002;
 
 for (var i = 0; i < numNodes; i++)
     figure[i] = createNode(null, null, null, null);
@@ -177,21 +177,23 @@ function setColorArrayForDrawing(colorArray) {
 }
 
 function handleAnimate() {
-    if (ketFrames.length === 0) {
+    if (keyFrames.length === 0) {
         console.log("ERROR: No animation keyframe is saved to animate.");
         return;
     }
 
     var currentKeyFrameIndex = 0;
+
     const animate = () => {
         if (currentKeyFrameIndex >= keyFrames.length) {
             clearInterval(animationInterval);
+            currentKeyFrameIndex = 0;
             return;
         }
         
         theta = keyFrames[currentKeyFrameIndex];
         currentKeyFrameIndex++;
-        initNodes(torsoId);
+        for (i = 0; i < numNodes; i++) initNodes(i);
     };
 
     var animationInterval = setInterval(animate, animationSpeed);
@@ -207,14 +209,14 @@ function handleSaveKeyframe() {
     if (keyFrames.length !== 0) { // If keyFrames is not empty
         // Store a new keyFrame for each angle of difference between new keyframe
         var currentKeyFrame = theta.slice();
-        var lastKeyFrame = keyFrames.slice(keyFrames.length - 1);
-    
+        var lastKeyFrame = keyFrames.slice(keyFrames.length - 1)[0];
+
         // Calculate difference
         var difference = [];
         for (var i = 0; i < lastKeyFrame.length; i++) {
             difference.push(lastKeyFrame[i] - currentKeyFrame[i]);
         }
-        
+
         var maxDifferenceInTheta = findAbsoluteMaximumInArray(difference);
 
         if (maxDifferenceInTheta === 0) {
@@ -397,6 +399,26 @@ window.onload = function init() {
         pupilsMoveY = event.srcElement.value;
         initNodes(leftEyePupilId);
         initNodes(rightEyePupilId);
+    };
+
+    document.getElementById("save-kf").onclick = function () {
+        console.log("Starting keyframe save...");
+        handleSaveKeyframe();
+        console.log("Keyframe saved.");
+    };
+    document.getElementById("clear-kf-list").onclick = function () {
+        console.log("Starting keyframe clear...");
+        handleClearKeyframes();
+        console.log("Keyframes cleared.");
+    };
+    document.getElementById("run-anim").onclick = function () {
+        console.log("Starting animation...");
+        handleAnimate();
+    };
+    document.getElementById("save-anim").onclick = function () {
+        console.log("-----------");
+        console.log(keyFrames);
+        console.log("-----------");
     };
 
     for (i = 0; i < numNodes; i++) initNodes(i);
