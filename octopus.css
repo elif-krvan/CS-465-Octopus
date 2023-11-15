@@ -1,7 +1,37 @@
+body {
+    font-family: "Sarabun", sans-serif;
+    font-weight: 400;
+}
+
 .App {
     display: flex;
     flex-direction: row;
     /* justify-content: space-between; */
+    align-items: center;
+}
+
+.head {
+    margin-top: -50px;
+}
+
+h1 {
+    font-size: 65px;
+    letter-spacing: 3px;
+    font-weight: 100;
+    font-family: "Lilita One", sans-serif;
+}
+
+h1 img {
+    height: 50px;
+    width: auto;
+    display: inline;
+    margin: 0 -7px;
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -16,7 +46,7 @@
 .arm-select-menu {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -27,23 +57,70 @@
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    border: 2px solid #003a57;
+    border: 2px solid #2980b9;
     border-radius: 5px;
-    background-color: #026d8f;
+    background-color: #3498db;
     color: white;
     margin: 5px;
 }
 
 .arm-btn:hover {
-    background-color: #1eb1d2;
+    background-color: #2980b9;
     /* color: #3f45f8; */
 }
 
 .arm-sliders {
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 .menu p {
     display: inline;
     margin-bottom: 50px;
+}
+
+.anim-btn {
+    width: 130px;
+}
+
+#slider-anim-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 70%;
+    margin: 10px 0;
+}
+
+/* Customize the track */
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 20%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+/* Customize the thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #3498db;
+    border-radius: 50%;
+    border: 2px solid #2980b9;
+    cursor: pointer;
+    margin-top: -6px; /* Center the thumb vertically within the track */
+}
+
+/* Adjust the thumb on focus */
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* Change thumb color on hover */
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #2980b9;
 }

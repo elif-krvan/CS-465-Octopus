@@ -10,6 +10,18 @@
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Merriweather+Sans:ital,wght@0,300;0,400;0,600;1,700&family=Open+Sans:wght@400;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;300;400&display=swap"
+            rel="stylesheet"
+        />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
@@ -85,168 +97,174 @@
                     element
                 </canvas>
             </div>
-            <div class="menu">
-                <div class="arm-select-menu">
-                    <button class="arm-btn" id="arm0">1</button>
-                    <button class="arm-btn" id="arm1">2</button>
-                    <button class="arm-btn" id="arm2">3</button>
-                    <button class="arm-btn" id="arm3">4</button>
-                    <button class="arm-btn" id="arm4">5</button>
-                    <button class="arm-btn" id="arm5">6</button>
-                    <button class="arm-btn" id="arm6">7</button>
-                    <button class="arm-btn" id="arm7">8</button>
+            <div class="side">
+                <div class="head">
+                    <h1>
+                        <img src="./img/icon.png" alt="Undo Icon" />
+                        CT
+                        <img src="./img/icon.png" alt="Undo Icon" />
+                        P
+                    </h1>
                 </div>
-                <div class="arm-sliders">
-                    <div id="slider-rotate-yy">
-                        Rotate torso along Y axis
-                        <input
-                            id="slider-rotate-y"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        <p id="text-rotate-y">0</p>
+                <div class="menu">
+                    <div class="arm-select-menu">
+                        <button class="arm-btn" id="arm0">1</button>
+                        <button class="arm-btn" id="arm1">2</button>
+                        <button class="arm-btn" id="arm2">3</button>
+                        <button class="arm-btn" id="arm3">4</button>
+                        <button class="arm-btn" id="arm4">5</button>
+                        <button class="arm-btn" id="arm5">6</button>
+                        <button class="arm-btn" id="arm6">7</button>
+                        <button class="arm-btn" id="arm7">8</button>
                     </div>
-                    <br />
-                    <div id="slider-rotate-xx">
-                        Rotate torso along X axis
-                        <input
-                            id="slider-rotate-x"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        <p id="text-rotate-x">0</p>
+                    <div class="arm-sliders">
+                        <div id="slider-rotate-yy">
+                            Rotate Octop along Y axis
+                            <input
+                                id="slider-rotate-y"
+                                type="range"
+                                min="-180"
+                                max="180"
+                                step="10"
+                                value="0"
+                            />
+                            <p id="text-rotate-y">0</p>
+                        </div>
+                        <div id="slider-rotate-xx">
+                            Rotate Octop along X axis
+                            <input
+                                id="slider-rotate-x"
+                                type="range"
+                                min="-180"
+                                max="180"
+                                step="10"
+                                value="0"
+                            />
+                            <p id="text-rotate-x">0</p>
+                        </div>
+                        <br />
+                        <div id="slider-arm-upp">
+                            Upper arm angle
+                            <input
+                                id="slider-arm-up"
+                                type="range"
+                                min="-180"
+                                max="180"
+                                step="10"
+                                value="0"
+                            />
+                            <p id="text-up-arm">0</p>
+                        </div>
+                        <div id="slider-arm-midd">
+                            Middle arm angle
+                            <input
+                                id="slider-arm-mid"
+                                type="range"
+                                min="-180"
+                                max="180"
+                                step="10"
+                                value="0"
+                            />
+                            <p id="text-mid-arm">0</p>
+                        </div>
+                        <div id="slider-arm-loww">
+                            Lower arm angle
+                            <input
+                                id="slider-arm-low"
+                                type="range"
+                                min="-180"
+                                max="180"
+                                step="10"
+                                value="0"
+                            />
+                            <p id="text-low-arm">0</p>
+                        </div>
                     </div>
-                    <br />
-                    <div id="slider-arm-upp">
-                        Upper Arm Angle
-                        <input
-                            id="slider-arm-up"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        <p id="text-up-arm">0</p>
+                    <div id="move-sliders">
+                        <div id="slider7">
+                            Move pupils along X axis
+                            <input
+                                id="slider-pupil-x"
+                                type="range"
+                                min="-0.9"
+                                max="0.9"
+                                step="0.1"
+                                value="0"
+                            />
+                            <p id="text-pupil-x">0</p>
+                        </div>
+                        <div id="slider8">
+                            Move pupils along Y axis
+                            <input
+                                id="slider-pupil-y"
+                                type="range"
+                                min="-0.9"
+                                max="0.9"
+                                step="0.1"
+                                value="0"
+                            />
+                            <p id="text-pupil-y">0</p>
+                        </div>
+                        <br />
+                        <div id="slider-x">
+                            Move along X axis
+                            <input
+                                id="slider-move-x"
+                                type="range"
+                                min="-20"
+                                max="20"
+                                step="0.5"
+                                value="0"
+                            />
+                            <p id="text-move-x">0</p>
+                        </div>
+                        <div id="slider-y">
+                            Move along Y axis
+                            <input
+                                id="slider-move-y"
+                                type="range"
+                                min="-20"
+                                max="20"
+                                step="0.5"
+                                value="0"
+                            />
+                            <p id="text-move-y">0</p>
+                        </div>
                     </div>
-                    <br />
-
-                    <div id="slider-arm-midd">
-                        Middle Arm Angle
+                    <div class="arm-select-menu">
+                        <button class="arm-btn anim-btn" id="save-kf">
+                            Save Key Frame
+                        </button>
+                        <button class="arm-btn anim-btn" id="clear-kf-list">
+                            Clear Key Frame List
+                        </button>
+                        <button class="arm-btn anim-btn" id="save-anim">
+                            Save Animation
+                        </button>
+                        <button class="arm-btn anim-btn" id="load-anim">
+                            Load Animation
+                        </button>
                         <input
-                            id="slider-arm-mid"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
+                            type="file"
+                            id="octop-input"
+                            accept=".octop"
+                            style="display: none"
                         />
-                        <p id="text-mid-arm">0</p>
-                    </div>
-                    <br />
-                    <div id="slider-arm-loww">
-                        Lower Arm Angle
-                        <input
-                            id="slider-arm-low"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        <p id="text-low-arm">0</p>
-                    </div>
-
-                    <div id="slider7">
-                        Move pupils along X axis
-                        <input
-                            id="slider-pupil-x"
-                            type="range"
-                            min="-0.9"
-                            max="0.9"
-                            step="0.2"
-                            value="0"
-                        />
-                        <p id="text-pupil-x">0</p>
-                    </div>
-                    <br />
-                    <div id="slider8">
-                        Move pupils along Y axis
-                        <input
-                            id="slider-pupil-y"
-                            type="range"
-                            min="-0.9"
-                            max="0.9"
-                            step="0.2"
-                            value="0"
-                        />
-                        <p id="text-pupil-y">0</p>
-                    </div>
-                    <br />
-                </div>
-                <div id="move-sliders">
-                    <div id="slider-x">
-                        Move along the x direction
-                        <input
-                            id="slider-move-x"
-                            type="range"
-                            min="-20"
-                            max="20"
-                            step="0.5"
-                            value="0"
-                        />
-                        <p id="text-move-x">0</p>
-                    </div>
-                    <br />
-                    <div id="slider-y">
-                        Move Along the y direction
-                        <input
-                            id="slider-move-y"
-                            type="range"
-                            min="-20"
-                            max="20"
-                            step="0.5"
-                            value="0"
-                        />
-                        <p id="text-move-y">0</p>
-                    </div>
-                </div>
-                <div class="arm-select-menu">
-                    <button class="arm-btn" id="save-kf">Save Key Frame</button>
-                    <button class="arm-btn" id="clear-kf-list">
-                        Clear Key Frame List
-                    </button>
-                    <button class="arm-btn" id="save-anim">
-                        Save Animation
-                    </button>
-                    <button class="arm-btn" id="load-anim">
-                        Load Animation
-                    </button>
-                    <input
-                        type="file"
-                        id="octop-input"
-                        accept=".octop"
-                        style="display: none"
-                    />
-                    <button class="arm-btn" id="run-anim">Run</button>
-                    <br />
-                    <div id="slider-anim-speedd">
-                        Animation Speed
-                        <input
-                            id="slider-anim-speed"
-                            type="range"
-                            min="1"
-                            max="5"
-                            step="0.5"
-                            value="0"
-                        />
-                        <p id="text-anim-speed">1</p>
+                        <button class="arm-btn anim-btn" id="run-anim">
+                            Run
+                        </button>
+                        <div id="slider-anim-cont">
+                            Animation speed
+                            <input
+                                id="slider-anim-speed"
+                                type="range"
+                                min="1"
+                                max="5"
+                                step="0.5"
+                                value="0"
+                            />
+                            <p id="text-anim-speed">1</p>
+                        </div>
                     </div>
                 </div>
             </div>

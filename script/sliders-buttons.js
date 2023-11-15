@@ -39,8 +39,8 @@ var animSpeedP;
 const armOffsetForButtonArray = 5;
 
 // arm selection button backgrounds
-const selectedBG = "#1eb1d2";
-const normalBG = "#026d8f";
+const selectedBG = "#2980b9";
+const normalBG = "#3498db";
 
 function initSliders() {
     initSliderText();
