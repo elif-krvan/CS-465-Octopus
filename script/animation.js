@@ -22,6 +22,7 @@ var vertices = [
 var numNodes = 11;
 var numAngles = 11;
 var angle = 0;
+const armNumber = 8;
 
 var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -107,83 +108,6 @@ function cube() {
     quad(4, 5, 6, 7);
     quad(5, 4, 0, 1);
 }
-
-// function sphere() {
-//     // Define the sphere geometry
-//     // const latitudeBands = 30;
-//     // const longitudeBands = 30;
-
-//     // for (let lat = 0; lat < latitudeBands; lat++) {
-//     //     const theta = (lat * Math.PI) / latitudeBands;
-//     //     const sinTheta = Math.sin(theta);
-//     //     const cosTheta = Math.cos(theta);
-
-//     //     let phi;
-//     //     let sinPhi;
-//     //     let cosPhi;
-
-//     //     for (let lon = 0; lon < longitudeBands; lon++) {
-//     //         phi = (lon * 2 * Math.PI) / longitudeBands;
-//     //         sinPhi = Math.sin(phi);
-//     //         cosPhi = Math.cos(phi);
-
-//     //         const eyePosition = vec4(
-//     //             cosPhi * sinTheta,
-//     //             cosTheta,
-//     //             sinPhi * sinTheta,
-//     //             1.0
-//     //         );
-
-//     //         eyesArray.push(eyePosition);
-//     //         eyeColorsArray.push(eyeColor);
-//     //         pupilColorsArray.push(pupilColor);
-//     //     }
-//     // }
-
-//     var latitudeBands = 10;
-//     var longitudeBands = 10;
-//     var radius = 2;
-
-//     sphereVertexPositionBuffer = gl.createBuffer();
-//     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexPositionBuffer);
-//     sphereVertexColorBuffer = gl.createBuffer();
-//     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexColorBuffer);
-//     sphereVertexIndexBuffer = gl.createBuffer();
-//     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereVertexIndexBuffer);
-
-//     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
-//         var theta = (latNumber * Math.PI) / latitudeBands;
-//         var sinTheta = Math.sin(theta);
-//         var cosTheta = Math.cos(theta);
-
-//         for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
-//             var phi = (longNumber * 2 * Math.PI) / longitudeBands;
-//             var sinPhi = Math.sin(phi);
-//             var cosPhi = Math.cos(phi);
-
-//             var x = cosPhi * sinTheta;
-//             var y = cosTheta;
-//             var z = sinPhi * sinTheta;
-
-//             vertexPositionData.push(radius * x);
-//             vertexPositionData.push(radius * y);
-//             vertexPositionData.push(radius * z);
-
-//             var first = latNumber * (longitudeBands + 1) + longNumber;
-//             var second = first + longitudeBands + 1;
-//             indexData.push(first);
-//             indexData.push(second);
-//             indexData.push(first + 1);
-
-//             indexData.push(second);
-//             indexData.push(second + 1);
-//             indexData.push(first + 1);
-
-//             eyeColorsArray.push(eyeColor);
-//             pupilColorsArray.push(pupilColor);
-//         }
-//     }
-// }
 
 function sphere() {
     const radius = 1.0;
@@ -449,32 +373,8 @@ window.onload = function init() {
         gl.drawArrays(gl.TRIANGLES, 0, 8);
     };
 
-    document.getElementById("slider-x").onchange = function () {
-        moveX = event.srcElement.value;
-        initNodes(torsoId);
-    };
-    document.getElementById("slider-y").onchange = function () {
-        moveY = event.srcElement.value;
-        initNodes(torsoId);
-    };
-
-    document.getElementById("slider0").onchange = function () {
-        theta[torsoId] = event.srcElement.value;
-        initNodes(torsoId);
-    };
-    document.getElementById("slider1").onchange = function () {
-        theta[upperArmId1] = event.srcElement.value;
-        initNodes(upperArmId1);
-    };
-
-    document.getElementById("slider2").onchange = function () {
-        theta[middleArmId1] = event.srcElement.value;
-        initNodes(middleArmId1);
-    };
-    document.getElementById("slider3").onchange = function () {
-        theta[lowerArmId1] = event.srcElement.value;
-        initNodes(lowerArmId1);
-    };
+    initSliders();
+    initLegButtonsAndAddEventListeners();
 
     document.getElementById("slider4").onchange = function () {
         theta[upperArmId2] = event.srcElement.value;

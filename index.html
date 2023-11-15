@@ -65,6 +65,10 @@
             src="./script/const/body_data.js"
         ></script>
         <script type="text/javascript" src="./script/node.js"></script>
+        <script
+            type="text/javascript"
+            src="./script/sliders-buttons.js"
+        ></script>
         <script type="text/javascript" src="./script/animation.js"></script>
     </head>
     <body>
@@ -83,14 +87,14 @@
             </div>
             <div class="menu">
                 <div class="arm-select-menu">
-                    <button class="arm-btn" id="arm1">1</button>
-                    <button class="arm-btn" id="arm2">2</button>
-                    <button class="arm-btn" id="arm3">3</button>
-                    <button class="arm-btn" id="arm4">4</button>
-                    <button class="arm-btn" id="arm5">5</button>
-                    <button class="arm-btn" id="arm6">6</button>
-                    <button class="arm-btn" id="arm7">7</button>
-                    <button class="arm-btn" id="arm8">8</button>
+                    <button class="arm-btn" id="arm0">1</button>
+                    <button class="arm-btn" id="arm1">2</button>
+                    <button class="arm-btn" id="arm2">3</button>
+                    <button class="arm-btn" id="arm3">4</button>
+                    <button class="arm-btn" id="arm4">5</button>
+                    <button class="arm-btn" id="arm5">6</button>
+                    <button class="arm-btn" id="arm6">7</button>
+                    <button class="arm-btn" id="arm7">8</button>
                 </div>
                 <div class="arm-sliders">
                     <div id="slider0">
@@ -106,21 +110,7 @@
                         180
                     </div>
                     <br />
-                    <div id="slider10">
-                        head2 angle -180
-                        <input
-                            id="slide"
-                            type="range"
-                            min="-180"
-                            max="180"
-                            step="10"
-                            value="0"
-                        />
-                        180
-                    </div>
-                    <br />
-
-                    <div id="slider1">
+                    <div id="slider-arm-up">
                         Upper Arm Angle
                         <input
                             id="slide"
@@ -134,7 +124,7 @@
                     </div>
                     <br />
 
-                    <div id="slider2">
+                    <div id="slider-arm-mid">
                         Middle Arm Angle
                         <input
                             id="slide"
@@ -147,7 +137,7 @@
                         180
                     </div>
                     <br />
-                    <div id="slider3">
+                    <div id="slider-arm-low">
                         Lower Arm Angle
                         <input
                             id="slide"
@@ -256,6 +246,32 @@
                     <br />
                     <div id="slider-y">
                         Move Along the y direction
+                        <input
+                            id="slide"
+                            type="range"
+                            min="-20"
+                            max="20"
+                            step="0.5"
+                            value="0"
+                        />
+                        180
+                    </div>
+                </div>
+                <div class="arm-select-menu">
+                    <button class="arm-btn" id="save-kf">Save Key Frame</button>
+                    <button class="arm-btn" id="clear-kf-list">
+                        Clear Key Frame List
+                    </button>
+                    <button class="arm-btn" id="save-anim">
+                        Save Animation
+                    </button>
+                    <button class="arm-btn" id="load-anim">
+                        Load Animation
+                    </button>
+                    <button class="arm-btn" id="run-anim">Run</button>
+                    <br />
+                    <div id="slider-anim-speed">
+                        Animation Speed
                         <input
                             id="slide"
                             type="range"
