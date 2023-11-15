@@ -8,5 +8,5 @@ const middleArmWidth = 0.95;
 const lowerArmWidth = 0.85;
 const headHeight = 4.0;
 const headWidth = 4.0;
-const eyeSize = 1.75;
-const pupilSize = 0.65;
+const eyeSize = 2.0;
+const pupilSize = 1.0;
