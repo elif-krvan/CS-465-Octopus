@@ -19,17 +19,6 @@ var vertices = [
     vec4(0.5, -0.5, -0.5, 1.0),
 ];
 
-var torsoHeight = 5.0;
-var torsoWidth = 5.0;
-var upperArmHeight = 6.0;
-var middleArmHeight = 6.0;
-var lowerArmHeight = 3.0;
-var upperArmWidth = 1.0;
-var middleArmWidth = 0.95;
-var lowerArmWidth = 0.85;
-var headHeight = 4.0;
-var headWidth = 4.0;
-
 var numNodes = 11;
 var numAngles = 11;
 var angle = 0;
@@ -57,6 +46,7 @@ for (var i = 0; i < numNodes; i++)
 var vBuffer;
 var cBuffer;
 var bgBuffer;
+var indexBuffer;
 
 var eyeBuffer;
 var eyeColorBuffer;
@@ -68,11 +58,17 @@ var textureObj;
 var modelViewLoc;
 
 var pointsArray = [];
-var colorsArray = [];
-
 var eyesArray = [];
+
+var colorsArray = [];
 var eyeColorsArray = [];
 var pupilColorsArray = [];
+
+var sphereArray = [];
+var sphereIndexArray = [];
+
+var vertexPositionData = [];
+var indexData = [];
 
 //-------------------------------------------
 
@@ -108,37 +104,144 @@ function cube() {
     quad(5, 4, 0, 1);
 }
 
-function eye() {
-    // Define the sphere geometry
-    const latitudeBands = 30;
-    const longitudeBands = 30;
+// function sphere() {
+//     // Define the sphere geometry
+//     // const latitudeBands = 30;
+//     // const longitudeBands = 30;
 
-    for (let lat = 0; lat <= latitudeBands; lat++) {
-        const theta = (lat * Math.PI) / latitudeBands;
-        const sinTheta = Math.sin(theta);
-        const cosTheta = Math.cos(theta);
+//     // for (let lat = 0; lat < latitudeBands; lat++) {
+//     //     const theta = (lat * Math.PI) / latitudeBands;
+//     //     const sinTheta = Math.sin(theta);
+//     //     const cosTheta = Math.cos(theta);
 
-        for (let lon = 0; lon <= longitudeBands; lon++) {
-            const phi = (lon * 2 * Math.PI) / longitudeBands;
-            const sinPhi = Math.sin(phi);
-            const cosPhi = Math.cos(phi);
+//     //     let phi;
+//     //     let sinPhi;
+//     //     let cosPhi;
 
-            const x = cosPhi * sinTheta;
-            const y = cosTheta;
-            const z = sinPhi * sinTheta;
+//     //     for (let lon = 0; lon < longitudeBands; lon++) {
+//     //         phi = (lon * 2 * Math.PI) / longitudeBands;
+//     //         sinPhi = Math.sin(phi);
+//     //         cosPhi = Math.cos(phi);
 
-            eyesArray.push(x, y, z);
+//     //         const eyePosition = vec4(
+//     //             cosPhi * sinTheta,
+//     //             cosTheta,
+//     //             sinPhi * sinTheta,
+//     //             1.0
+//     //         );
+
+//     //         eyesArray.push(eyePosition);
+//     //         eyeColorsArray.push(eyeColor);
+//     //         pupilColorsArray.push(pupilColor);
+//     //     }
+//     // }
+
+//     var latitudeBands = 10;
+//     var longitudeBands = 10;
+//     var radius = 2;
+
+//     sphereVertexPositionBuffer = gl.createBuffer();
+//     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexPositionBuffer);
+//     sphereVertexColorBuffer = gl.createBuffer();
+//     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexColorBuffer);
+//     sphereVertexIndexBuffer = gl.createBuffer();
+//     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereVertexIndexBuffer);
+
+//     for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+//         var theta = (latNumber * Math.PI) / latitudeBands;
+//         var sinTheta = Math.sin(theta);
+//         var cosTheta = Math.cos(theta);
+
+//         for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+//             var phi = (longNumber * 2 * Math.PI) / longitudeBands;
+//             var sinPhi = Math.sin(phi);
+//             var cosPhi = Math.cos(phi);
+
+//             var x = cosPhi * sinTheta;
+//             var y = cosTheta;
+//             var z = sinPhi * sinTheta;
+
+//             vertexPositionData.push(radius * x);
+//             vertexPositionData.push(radius * y);
+//             vertexPositionData.push(radius * z);
+
+//             var first = latNumber * (longitudeBands + 1) + longNumber;
+//             var second = first + longitudeBands + 1;
+//             indexData.push(first);
+//             indexData.push(second);
+//             indexData.push(first + 1);
+
+//             indexData.push(second);
+//             indexData.push(second + 1);
+//             indexData.push(first + 1);
+
+//             eyeColorsArray.push(eyeColor);
+//             pupilColorsArray.push(pupilColor);
+//         }
+//     }
+// }
+
+function sphere() {
+    const radius = 1.0;
+    const latitudeBands = 300;
+    const longitudeBands = 300;
+
+    for (var lat = 0; lat < latitudeBands; lat++) {
+        var theta = (lat * Math.PI) / latitudeBands;
+        var sinTheta = Math.sin(theta);
+        var cosTheta = Math.cos(theta);
+
+        for (var lon = 0; lon < longitudeBands; lon++) {
+            var phi = (lon * 2 * Math.PI) / longitudeBands;
+            var sinPhi = Math.sin(phi);
+            var cosPhi = Math.cos(phi);
+
+            var x = radius * cosPhi * sinTheta;
+            var y = radius * cosTheta;
+            var z = radius * sinPhi * sinTheta;
+
+            sphereArray.push(vec4(x, y, z, 1.0));
             eyeColorsArray.push(eyeColor);
             pupilColorsArray.push(pupilColor);
         }
     }
 
-    // gl.bindBuffer(gl.ARRAY_BUFFER, eyeBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    for (var lat = 0; lat < latitudeBands; ++lat) {
+        for (var lon = 0; lon < longitudeBands; ++lon) {
+            var vA = lat * (longitudeBands + 1) + lon;
+            var vB = vA + (latitudeBands + 1);
+            var vC = vA + 1;
+            var vD = vB + 1;
 
-    // const position = gl.getAttribLocation(shaderProgram, 'vPosition');
-    // gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(position);
+            sphereIndexArray.push(vA);
+            sphereIndexArray.push(vB);
+            sphereIndexArray.push(vC);
+            sphereIndexArray.push(vB);
+            sphereIndexArray.push(vD);
+            sphereIndexArray.push(vC);
+        }
+    }
+}
+
+function setArrayForDrawing(vertexArray) {
+    // vertices buffer set up
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexArray), gl.STATIC_DRAW);
+
+    const positionAttribLocation = gl.getAttribLocation(program, "vPosition");
+    gl.vertexAttribPointer(positionAttribLocation, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionAttribLocation);
+}
+
+function setColorArrayForDrawing(colorArray) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorArray), gl.STATIC_DRAW);
+
+    // use the eyeColorBuffer for eye color
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
 }
 
 window.onload = function init() {
@@ -186,8 +289,9 @@ window.onload = function init() {
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
 
     cube();
-    eye();
+    sphere();
 
+    indexBuffer = gl.createBuffer();
     vBuffer = gl.createBuffer();
     cBuffer = gl.createBuffer();
     bgBuffer = gl.createBuffer();
@@ -209,6 +313,13 @@ window.onload = function init() {
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(
+        gl.ELEMENT_ARRAY_BUFFER,
+        flatten(sphereIndexArray),
+        gl.STATIC_DRAW
+    );
 
     // eye buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, eyeBuffer);

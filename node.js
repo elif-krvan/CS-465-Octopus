@@ -89,7 +89,6 @@ function initNodes(Id) {
 
         case leftEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
-            console.log("eye");
             // something went wrong if octopus placement is changed since we did not set y position
             m = translate(-(torsoWidth / 2 - 0.5), 0.0, torsoWidth / 2);
 
@@ -97,7 +96,6 @@ function initNodes(Id) {
             break;
         case rightEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
-            console.log("eye111");
             // something went wrong if octopus placement is changed since we did not set y position
             m = translate(torsoWidth / 2 - 0.5, 0.0, torsoWidth / 2);
 
@@ -110,9 +108,8 @@ function initNodes(Id) {
             break;
         case leftEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
-            console.log("pup");
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 4);
+            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 3);
 
             figure[leftEyePupilId] = createNode(
                 m,
@@ -123,9 +120,8 @@ function initNodes(Id) {
             break;
         case rightEyePupilId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
-            console.log("pup");
             // something went wrong if octopus placement is changed since we did not set y position
-            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 4);
+            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 3);
 
             figure[rightEyePupilId] = createNode(
                 m,
@@ -256,15 +252,9 @@ function traverse(Id) {
 }
 
 function torso() {
-    // make sure that eye color array is filled with color vectors
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
-
-    // Use the eyeColorBuffer for the colors
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
+    // set color and vertex array
+    setColorArrayForDrawing(colorsArray);
+    setArrayForDrawing(pointsArray);
 
     instanceMatrix = mult(modelViewMatrix, translate(0.0, 0, 0.0));
     instanceMatrix = mult(
@@ -277,63 +267,61 @@ function torso() {
 }
 
 function eye1() {
-    // make sure that eye color array is filled with color vectors
-    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(eyeColorsArray), gl.STATIC_DRAW);
+    setColorArrayForDrawing(eyeColorsArray);
+    setArrayForDrawing(sphereArray);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
 
-    // Use the eyeColorBuffer for the colors
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
-    // var translateY = (upperArmHeight + torsoHeight) / 2;
+    // // Fill the vertex buffer with data
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereArray), gl.STATIC_DRAW);
 
-    // instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
-    instanceMatrix = mult(modelViewMatrix, scale4(2.0, 2.0, 2.0));
+    // // Get the attribute location for the vertex position
+    // var positionAttribLocation = gl.getAttribLocation(program, "vPosition");
+    // gl.vertexAttribPointer(positionAttribLocation, 4, gl.FLOAT, false, 0, 0);
+    // gl.enableVertexAttribArray(positionAttribLocation);
+
+    instanceMatrix = mult(modelViewMatrix, scale4(eyeSize, eyeSize, eyeSize));
+
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
 
-    // Draw using the updated colorsArray
-    for (var i = 0; i < 6; i++) {
-        gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
-    }
+    // works reallllly weirdly
+    // Create and bind the index buffer
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    // gl.bufferData(
+    //     gl.ELEMENT_ARRAY_BUFFER,
+    //     flatten(sphereIndexArray),
+    //     gl.STATIC_DRAW
+    // );
+    // positionAttribLocation = gl.getAttribLocation(program, "vPosition");
+    // gl.vertexAttribPointer(positionAttribLocation, 4, gl.FLOAT, false, 0, 0);
+    // gl.enableVertexAttribArray(positionAttribLocation);
+    // // Draw the sphere with elements
+    // gl.drawElements(
+    //     gl.TRIANGLES,
+    //     sphereIndexArray.length,
+    //     gl.UNSIGNED_SHORT,
+    //     0
+    // );
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, sphereArray.length);
 }
 
 function pupil1() {
     // make sure that eye color array is filled with color vectors
-    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(pupilColorsArray), gl.STATIC_DRAW);
+    setColorArrayForDrawing(pupilColorsArray);
+    setArrayForDrawing(sphereArray);
 
-    // Use the eyeColorBuffer for the colors
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
-    // var translateY = (upperArmHeight + torsoHeight) / 2;
-
-    // instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
-    instanceMatrix = mult(modelViewMatrix, scale4(1.0, 1.0, 1.0));
+    // scale the sphere to the pupil size
+    instanceMatrix = mult(
+        modelViewMatrix,
+        scale4(pupilSize, pupilSize, pupilSize)
+    );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
 
-    // Draw using the updated colorsArray
-    for (var i = 0; i < 6; i++) {
-        gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
-    }
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, sphereArray.length);
 }
 
 function upperArm1() {
-    colorsArray.forEach((c) => {
-        c[0] = octopusColor[0];
-        c[1] = octopusColor[1];
-        c[2] = octopusColor[2];
-        c[3] = octopusColor[3];
-    });
-
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
+    setColorArrayForDrawing(colorsArray);
 
     var translateY = (upperArmHeight + torsoHeight) / 2;
 
@@ -347,6 +335,8 @@ function upperArm1() {
 }
 
 function middleArm1() {
+    setColorArrayForDrawing(colorsArray);
+
     var translateY = (middleArmHeight + torsoHeight) / 2 + upperArmHeight;
 
     instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
@@ -359,6 +349,8 @@ function middleArm1() {
 }
 
 function lowerArm1() {
+    setColorArrayForDrawing(colorsArray);
+
     var translateY =
         (torsoHeight + lowerArmHeight) / 2 + middleArmHeight + upperArmHeight;
 
