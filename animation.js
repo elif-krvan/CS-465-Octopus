@@ -30,7 +30,7 @@ var lowerArmWidth = 0.85;
 var headHeight = 4.0;
 var headWidth = 4.0;
 
-var numNodes = 9;
+var numNodes = 11;
 var numAngles = 11;
 var angle = 0;
 
@@ -43,6 +43,7 @@ var canvasHeight;
 
 var octopusColor = vec4(0.831, 0.373, 0.349, 1.0);
 var eyeColor = vec4(1.0, 1.0, 1.0, 1.0);
+var pupilColor = vec4(0.0, 0.0, 0.0, 1.0);
 
 var numVertices = 4;
 
@@ -71,6 +72,7 @@ var colorsArray = [];
 
 var eyesArray = [];
 var eyeColorsArray = [];
+var pupilColorsArray = [];
 
 //-------------------------------------------
 
@@ -84,7 +86,7 @@ function scale4(a, b, c) {
 
 //--------------------------------------------
 
-function quad(a, b, c, d, color) {
+function quad(a, b, c, d) {
     pointsArray.push(vertices[a]);
     pointsArray.push(vertices[b]);
     pointsArray.push(vertices[c]);
@@ -127,6 +129,7 @@ function eye() {
 
             eyesArray.push(x, y, z);
             eyeColorsArray.push(eyeColor);
+            pupilColorsArray.push(pupilColor);
         }
     }
 

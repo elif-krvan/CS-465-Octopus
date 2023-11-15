@@ -93,7 +93,7 @@ function initNodes(Id) {
             // something went wrong if octopus placement is changed since we did not set y position
             m = translate(-(torsoWidth / 2 - 0.5), 0.0, torsoWidth / 2);
 
-            figure[leftEyeId] = createNode(m, eye1, rightEyeId, null);
+            figure[leftEyeId] = createNode(m, eye1, rightEyeId, leftEyePupilId);
             break;
         case rightEyeId:
             // var translateX = (torsoWidth - upperArmWidth) / 2;
@@ -101,7 +101,38 @@ function initNodes(Id) {
             // something went wrong if octopus placement is changed since we did not set y position
             m = translate(torsoWidth / 2 - 0.5, 0.0, torsoWidth / 2);
 
-            figure[rightEyeId] = createNode(m, eye1, leftEyeId, null);
+            figure[rightEyeId] = createNode(
+                m,
+                eye1,
+                leftEyeId,
+                rightEyePupilId
+            );
+            break;
+        case leftEyePupilId:
+            // var translateX = (torsoWidth - upperArmWidth) / 2;
+            console.log("pup");
+            // something went wrong if octopus placement is changed since we did not set y position
+            m = translate(-torsoWidth / 2 + 2.6, 0.0, torsoWidth / 2);
+
+            figure[leftEyePupilId] = createNode(
+                m,
+                pupil1,
+                rightEyePupilId,
+                null
+            );
+            break;
+        case rightEyePupilId:
+            // var translateX = (torsoWidth - upperArmWidth) / 2;
+            console.log("pup");
+            // something went wrong if octopus placement is changed since we did not set y position
+            m = translate(torsoWidth / 2 - 2.6, 0.0, torsoWidth / 2);
+
+            figure[rightEyePupilId] = createNode(
+                m,
+                pupil1,
+                leftEyePupilId,
+                null
+            );
             break;
         case upperArmId1:
             var translateX = (torsoWidth - upperArmWidth) / 2;
@@ -259,6 +290,28 @@ function eye1() {
 
     // instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
     instanceMatrix = mult(modelViewMatrix, scale4(2.0, 2.0, 2.0));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+
+    // Draw using the updated colorsArray
+    for (var i = 0; i < 6; i++) {
+        gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
+    }
+}
+
+function pupil1() {
+    // make sure that eye color array is filled with color vectors
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(pupilColorsArray), gl.STATIC_DRAW);
+
+    // Use the eyeColorBuffer for the colors
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.bindBuffer(gl.ARRAY_BUFFER, eyeColorBuffer);
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
+    // var translateY = (upperArmHeight + torsoHeight) / 2;
+
+    // instanceMatrix = mult(modelViewMatrix, translate(0.0, -translateY, 0.0));
+    instanceMatrix = mult(modelViewMatrix, scale4(1.0, 1.0, 1.0));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
 
     // Draw using the updated colorsArray
