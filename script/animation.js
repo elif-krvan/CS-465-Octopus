@@ -272,10 +272,10 @@ function handleClearKeyframes() {
 
 function handleSingleKeyFrameSave() {
     singleKeyFrames.push(theta.slice());
-    singlePupilXKeyFrames.push(createRepeatingArray(pupilsMoveX, theta.slice().length));
-    singlePupilYKeyFrames.push(createRepeatingArray(pupilsMoveY, theta.slice().length));
-    singleBodyXKeyFrames.push(createRepeatingArray(moveX, theta.slice().length));
-    singleBodyYKeyFrames.push(createRepeatingArray(moveY, theta.slice().length));
+    singlePupilXKeyFrames.push(createRepeatingArray(parseFloat(pupilsMoveX), theta.slice().length));
+    singlePupilYKeyFrames.push(createRepeatingArray(parseFloat(pupilsMoveY), theta.slice().length));
+    singleBodyXKeyFrames.push(createRepeatingArray(parseFloat(moveX), theta.slice().length));
+    singleBodyYKeyFrames.push(createRepeatingArray(parseFloat(moveY), theta.slice().length));
 }
 
 function createRepeatingArray(item, repeatTimes) {
