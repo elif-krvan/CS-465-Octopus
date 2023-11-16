@@ -64,21 +64,21 @@ function initSliders() {
 
     rotateTorsoXSlider = document.getElementById("slider-rotate-x");
     rotateTorsoXSlider.onchange = function () {
-        rotateXP.innerHTML = this.value;
+        rotateXP.innerHTML = `${this.value}°`;
         theta[torsoIdX] = this.value;
         initNodes(torsoId);
     };
 
     rotateTorsoYSlider = document.getElementById("slider-rotate-y");
     rotateTorsoYSlider.onchange = function () {
-        rotateYP.innerHTML = this.value;
+        rotateYP.innerHTML = `${this.value}°`;
         theta[torsoId] = this.value;
         initNodes(torsoId);
     };
 
     upperArmSlider = document.getElementById("slider-arm-up");
     upperArmSlider.onchange = function () {
-        armUpperP.innerHTML = upperArmSlider.value;
+        armUpperP.innerHTML = `${this.value}°`;
 
         let thetaIndex = convertButtonIndexToThetaArrIndex(activeArmButtonId);
         theta[thetaIndex] = upperArmSlider.value;
@@ -87,7 +87,7 @@ function initSliders() {
 
     middleArmSlider = document.getElementById("slider-arm-mid");
     middleArmSlider.onchange = function () {
-        armMiddleP.innerHTML = middleArmSlider.value;
+        armMiddleP.innerHTML = `${this.value}°`;
 
         let thetaIndex =
             convertButtonIndexToThetaArrIndex(activeArmButtonId) + 1;
@@ -97,7 +97,7 @@ function initSliders() {
 
     lowerArmSlider = document.getElementById("slider-arm-low");
     lowerArmSlider.onchange = function () {
-        armLowerP.innerHTML = lowerArmSlider.value;
+        armLowerP.innerHTML = `${this.value}°`;
 
         let thetaIndex =
             convertButtonIndexToThetaArrIndex(activeArmButtonId) + 2;
@@ -189,7 +189,7 @@ function initAnimationButtonsAndAddEventListeners() {
 }
 
 function initLegButtonsAndAddEventListeners() {
-    for (let i = 0; i < armNumber; ++i) {
+    for (let i = 0; i < numArms; ++i) {
         armButtonArray.push(document.getElementById(`arm${i}`));
         armButtonArray[i].addEventListener("click", () => {
             // reset to normal background color
@@ -217,6 +217,25 @@ function initLegButtonsAndAddEventListeners() {
 
     //set initial selected background color
     armButtonArray[activeArmButtonId].style.backgroundColor = selectedBG;
+
+    addHoverEffectToButtons();
+}
+
+function addHoverEffectToButtons() {
+    armButtonArray.forEach((btn) => {
+        btn.addEventListener("mouseenter", () => {
+            btn.style.backgroundColor = selectedBG;
+        });
+    });
+
+    // Add mouse leave event to change the button background back if the button is not clicked
+    armButtonArray.forEach((btn, index) => {
+        btn.addEventListener("mouseleave", () => {
+            if (index != activeArmButtonId) {
+                btn.style.backgroundColor = normalBG;
+            }
+        });
+    });
 }
 
 function initButtons() {
