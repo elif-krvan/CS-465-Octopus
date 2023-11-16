@@ -48,10 +48,10 @@
                 vec3 pos = -(modelViewMatrix * vPosition).xyz;
                 vec3 light = lightPosition.xyz;
                 vec3 L = normalize( light - pos );
-                
+
                 vec3 E = normalize( -pos );
                 vec3 H = normalize( L + E );
-                
+
                 vec4 NN = vec4(vNormal,0);
 
                 // Transform vertex normal into eye coordinates
@@ -65,18 +65,18 @@
 
                 float Ks = pow( max(dot(N, H), 0.0), shininess );
                 vec4  specular = Ks * specularProduct;
-                
+
                 if( dot(L, N) < 0.0 ) {
                     specular = vec4(0.0, 0.0, 0.0, 1.0);
-                } 
+                }
 
                 gl_Position = projectionMatrix * modelViewMatrix * vPosition;
                 fColor = (ambient + diffuse + specular) * 0.5 + vColor  * 0.8;
-                
+
                 fColor.a = 1.0;
 
                 texCoord = vTexCoord;
-            } 
+            }
         </script>
 
         <script id="fragment-shader" type="x-shader/x-fragment">
@@ -306,6 +306,9 @@
                         <button class="arm-btn anim-btn" id="run-shy-anim">
                             <p id="shy-p">Shy</p>
                             <p id="shy-emoji">👉👈</p>
+                        </button>
+                        <button class="arm-btn anim-btn" id="run-anger-anim">
+                            Anger 😡
                         </button>
                     </div>
                 </div>
