@@ -188,7 +188,7 @@ function initAnimationButtonsAndAddEventListeners() {
 }
 
 function initLegButtonsAndAddEventListeners() {
-    for (let i = 0; i < armNumber; ++i) {
+    for (let i = 0; i < numArms; ++i) {
         armButtonArray.push(document.getElementById(`arm${i}`));
         armButtonArray[i].addEventListener("click", () => {
             // reset to normal background color

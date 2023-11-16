@@ -1,5 +1,5 @@
-const torsoHeight = 4.0;
-const torsoWidth = 4.0;
+const torsoHeight = 5.0;
+const torsoWidth = 5.0;
 
 const upperArmHeight = 6.0;
 const middleArmHeight = 6.0;
@@ -14,3 +14,5 @@ const headWidth = 4.0;
 
 const eyeSize = 1.85;
 const pupilSize = 0.85;
+
+const legCircleRadius = torsoWidth * 0.75;

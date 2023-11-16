@@ -10,13 +10,19 @@ function createNode(transform, render, sibling, child) {
     return node;
 }
 
-function setUpperArmProperties(xPosition, armId, middleArmId, armFcn) {
-    // console.log("node1");
+function setUpperArmProperties(armSequenceId, armId, middleArmId, armFcn) {
+    var armAngle = (armSequenceId * Math.PI) / 3; // in radians
+    var translateX = legCircleRadius * Math.cos(armAngle);
+    var translateZ = legCircleRadius * Math.sin(armAngle);
+
+    console.log("x:", translateX);
+    console.log("z:", translateZ);
+
     var rotatePointY = torsoHeight / 2;
 
     // translating x position at this step, also traslates child arms
     // translate y position to the top of the arm so that the rotation can be done wrt the top of the arm
-    m = translate(-xPosition, -rotatePointY, 0.0);
+    m = translate(-translateX, -rotatePointY, translateZ);
 
     // rotate the arms wrt x and z axis
     m = mult(m, rotate(theta[armId], 1, 0, 1));
@@ -69,10 +75,10 @@ function initNodes(Id) {
                 upperArmId2,
                 leftEyeId,
                 rightEyeId,
-                // upperArmId3,
-                // upperArmId4,
-                // upperArmId5,
-                // upperArmId6,
+                upperArmId3,
+                upperArmId4,
+                upperArmId5,
+                upperArmId6,
                 // upperArmId7,
                 // upperArmId8,
             ]);
@@ -134,23 +140,22 @@ function initNodes(Id) {
             );
             break;
         case upperArmId1:
-            var translateX = (torsoWidth - upperArmWidth) / 2;
-            setUpperArmProperties(
-                translateX,
-                upperArmId1,
-                middleArmId1,
-                upperArm1
-            );
+            setUpperArmProperties(0, upperArmId1, middleArmId1, upperArm1);
             break;
         case upperArmId2:
-            var translateX = (torsoWidth - upperArmWidth) / 2;
-
-            setUpperArmProperties(
-                -translateX,
-                upperArmId2,
-                middleArmId2,
-                upperArm1
-            );
+            setUpperArmProperties(1, upperArmId2, middleArmId2, upperArm1);
+            break;
+        case upperArmId3:
+            setUpperArmProperties(2, upperArmId3, middleArmId3, upperArm1);
+            break;
+        case upperArmId4:
+            setUpperArmProperties(3, upperArmId4, middleArmId4, upperArm1);
+            break;
+        case upperArmId5:
+            setUpperArmProperties(4, upperArmId5, middleArmId5, upperArm1);
+            break;
+        case upperArmId6:
+            setUpperArmProperties(5, upperArmId6, middleArmId6, upperArm1);
             break;
 
         case middleArmId1:
@@ -159,11 +164,35 @@ function initNodes(Id) {
         case middleArmId2:
             setMiddleArmProperties(middleArmId2, lowerArmId2, middleArm1);
             break;
+        case middleArmId3:
+            setMiddleArmProperties(middleArmId3, lowerArmId3, middleArm1);
+            break;
+        case middleArmId4:
+            setMiddleArmProperties(middleArmId4, lowerArmId4, middleArm1);
+            break;
+        case middleArmId5:
+            setMiddleArmProperties(middleArmId5, lowerArmId5, middleArm1);
+            break;
+        case middleArmId6:
+            setMiddleArmProperties(middleArmId6, lowerArmId6, middleArm1);
+            break;
         case lowerArmId1:
             setLowerArmProperties(lowerArmId1, lowerArm1);
             break;
         case lowerArmId2:
             setLowerArmProperties(lowerArmId2, lowerArm1);
+            break;
+        case lowerArmId3:
+            setLowerArmProperties(lowerArmId3, lowerArm1);
+            break;
+        case lowerArmId4:
+            setLowerArmProperties(lowerArmId4, lowerArm1);
+            break;
+        case lowerArmId5:
+            setLowerArmProperties(lowerArmId5, lowerArm1);
+            break;
+        case lowerArmId6:
+            setLowerArmProperties(lowerArmId6, lowerArm1);
             break;
 
         // case rightUpperArmId:

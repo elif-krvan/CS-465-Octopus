@@ -19,12 +19,15 @@ var vertices = [
     vec4(0.5, -0.5, -0.5, 1.0),
 ];
 
-var numNodes = 11;
-var numAngles = 11;
-var angle = 0;
+const numArms = 6;
+// arms no * arms segments + num eyes + num pupils + head
+const numNodes = numArms * 3 + 5;
+const numAngles = 11;
+const angle = 0;
 const armNumber = 8;
 
-var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+// initialize theta array with zeroes
+var theta = Array(numNodes).fill(0);
 
 var canvasWidth;
 var canvasHeight;
