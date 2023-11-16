@@ -247,6 +247,10 @@ function initPreDefinedAnimationButtons() {
     document.getElementById("run-shy-anim").addEventListener("click", () => {
         setPresetAnimation("../shy.octop");
     });
+
+    document.getElementById("run-anger-anim").addEventListener("click", () => {
+        setPresetAnimation("../anger.octop");
+    });
 }
 
 function initButtons() {
