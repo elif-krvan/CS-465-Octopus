@@ -8,6 +8,33 @@ var modelViewMatrix;
 var instanceMatrix;
 var modelViewMatrixLoc;
 
+var framebuffer;
+var thetaLoc;
+var color = new Uint8Array(4);
+
+var lightAmbientModifier = 0.15;
+var lightDiffuseModifier = 0.75;
+var lightSpecularModifier = 0.95;
+
+var lightPosition = vec4(1.0, 1.0, -1.0, 0.0 );
+var lightAmbient = vec4(lightAmbientModifier, lightAmbientModifier, lightAmbientModifier, 1.0);
+var lightDiffuse = vec4(lightDiffuseModifier, lightDiffuseModifier, lightDiffuseModifier, 1.0);
+var lightSpecular = vec4(lightSpecularModifier, lightSpecularModifier, lightSpecularModifier, 1.0);
+
+var materialAmbientModifier = 1.0;
+var materialDiffuseModifier = 0.48;
+var materialSpecularModifier = 0.25;
+
+var materialAmbient = vec4(materialAmbientModifier, -0.25, materialAmbientModifier, 1.0);
+var materialDiffuse = vec4(materialDiffuseModifier, materialDiffuseModifier * 0.8, 0.2, 0.5);
+var materialSpecular = vec4(materialSpecularModifier, materialSpecularModifier * 0.8, 0.3, 1.0);
+var materialShininess = 250.0;
+
+var ctm;
+var ambientColor, diffuseColor, specularColor;
+// var modelView, projection;
+var viewerPos;
+
 var vertices = [
     vec4(-0.5, -0.5, 0.5, 1.0),
     vec4(-0.5, 0.5, 0.5, 1.0),
@@ -70,6 +97,8 @@ var textureObj;
 var modelViewLoc;
 
 var pointsArray = [];
+var normalsArray = [];
+var sphereNormalsArray = [];
 var eyesArray = [];
 
 var octopusArmsColorArray = [];
@@ -93,10 +122,21 @@ function scale4(a, b, c) {
 //--------------------------------------------
 
 function quad(a, b, c, d) {
+    var t1 = subtract(vertices[b], vertices[a]);
+    var t2 = subtract(vertices[c], vertices[b]);
+    var normal = cross(t1, t2);
+    var normal = vec3(normal);
+    normal = normalize(normal);
+    
     pointsArray.push(vertices[a]);
     pointsArray.push(vertices[b]);
     pointsArray.push(vertices[c]);
     pointsArray.push(vertices[d]);
+
+    normalsArray.push(normal); 
+    normalsArray.push(normal); 
+    normalsArray.push(normal); 
+    normalsArray.push(normal); 
 
     octopusArmsColorArray.push(octopusColor);
     octopusArmsColorArray.push(octopusColor);
@@ -117,16 +157,14 @@ function cube() {
 function sphere() {
     const radius = 1.0;
     const latitudeBands = 400;
-    // const latitudeBands = 200;
     const longitudeBands = 400;
 
-    for (var lat = 0; lat < latitudeBands; lat++) {
-        // for (var lat = 0; lat < latitudeBands / 2; lat++) {
+    for (var lat = 0; lat <= latitudeBands; lat++) {
         var theta = (lat * Math.PI) / latitudeBands;
         var sinTheta = Math.sin(theta);
         var cosTheta = Math.cos(theta);
 
-        for (var lon = 0; lon < longitudeBands; lon++) {
+        for (var lon = 0; lon <= longitudeBands; lon++) {
             var phi = (lon * 2 * Math.PI) / longitudeBands;
             var sinPhi = Math.sin(phi);
             var cosPhi = Math.cos(phi);
@@ -135,7 +173,11 @@ function sphere() {
             var y = radius * cosTheta;
             var z = radius * sinPhi * sinTheta;
 
+            var normal = vec3(x, y, z);
+            normal = normalize(normal);
+
             sphereArray.push(vec4(x, y, z, 1.0));
+            sphereNormalsArray.push(normal); // Add normal to the normals array
 
             octopusHeadColorsArray.push(octopusColor);
             eyeColorsArray.push(eyeColor);
@@ -375,16 +417,16 @@ function loadFile(file) {
                 singleBodyXKeyFrames = jsonData.singleBodyXKeyFrames;
                 singleBodyYKeyFrames = jsonData.singleBodyYKeyFrames;
                 singleKeyFrames = jsonData.singleKeyFrames;
-                theta = theta;
-                keyFrames = keyFrames;
-                keyFramesPX = keyFramesPX;
-                keyFramesPY = keyFramesPY;
-                keyFramesBX = keyFramesBX;
-                keyFramesBY = keyFramesBY;
-                moveX = moveX;
-                moveY = moveY;
-                pupilsMoveX = pupilsMoveX;
-                pupilsMoveY = pupilsMoveY;
+                // theta = jsonData.theta;
+                keyFrames = jsonData.keyFrames;
+                keyFramesPX = jsonData.keyFramesPX;
+                keyFramesPY = jsonData.keyFramesPY;
+                keyFramesBX = jsonData.keyFramesBX;
+                keyFramesBY = jsonData.keyFramesBY;
+                // moveX = jsonData.moveX;
+                // moveY = jsonData.moveY;
+                // pupilsMoveX = jsonData.pupilsMoveX;
+                // pupilsMoveY = jsonData.pupilsMoveY;
 
                 for (var i = 0; i < numNodes; i++) {
                     figure[i] = createNode(null, null, null, null);
@@ -403,20 +445,41 @@ function loadFile(file) {
     }
 }
 
-function setShyAnimation() {
-    const absolutePath = '../shy.octop';
-
+function setPresetAnimation(absolutePath) {
     fetch(absolutePath)
-        .then(response => response.json())
-        .then(jsonData => {
-            // Now you can use jsonData as needed
-            console.log(jsonData);
+    .then(response => response.json())
+    .then(jsonData => {
+        // set data
+        handleClearKeyframes();
+        singlePupilXKeyFrames = jsonData.singlePupilXKeyFrames;
+        singlePupilYKeyFrames = jsonData.singlePupilYKeyFrames;
+        singleBodyXKeyFrames = jsonData.singleBodyXKeyFrames;
+        singleBodyYKeyFrames = jsonData.singleBodyYKeyFrames;
+        singleKeyFrames = jsonData.singleKeyFrames;
+        // theta = jsonData.theta;
+        keyFrames = jsonData.keyFrames;
+        keyFramesPX = jsonData.keyFramesPX;
+        keyFramesPY = jsonData.keyFramesPY;
+        keyFramesBX = jsonData.keyFramesBX;
+        keyFramesBY = jsonData.keyFramesBY;
+        // moveX = jsonData.moveX;
+        // moveY = jsonData.moveY;
+        // pupilsMoveX = jsonData.pupilsMoveX;
+        // pupilsMoveY = jsonData.pupilsMoveY;
 
-            // The rest of your code for handling the parsed data goes here
-        })
-        .catch(error => {
-            console.error('Error fetching or parsing JSON:', error);
-        });
+        for (var i = 0; i < numNodes; i++) {
+            figure[i] = createNode(null, null, null, null);
+        } 
+
+        for (i = 0; i < theta.length; i++) {
+            initNodes(i);
+        }
+
+        handleAnimate();
+    })
+    .catch(error => {
+        console.error('Error fetching or parsing JSON:', error);
+    });
 }
 
 function createSaveData() {
@@ -483,20 +546,42 @@ window.onload = function init() {
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
+    // gl.enable(gl.CULL_FACE);
+    // gl.frontFace(gl.BACK);
+
+    /*
+    var texture = gl.createTexture();
+    gl.bindTexture( gl.TEXTURE_2D, texture );
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    */
+
+    // Allocate a frame buffer object
+    framebuffer = gl.createFramebuffer();
+    gl.bindFramebuffer( gl.FRAMEBUFFER, framebuffer);
+
+    // Attach color buffer
+    // gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+    // check for completeness
+    //var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    //if(status != gl.FRAMEBUFFER_COMPLETE) alert('Frame Buffer Not Complete');
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
     //
     //  Load shaders and initialize attribute buffers
     //
     program = initShaders(gl, "vertex-shader", "fragment-shader");
-
     gl.useProgram(program);
-    // gl.enable(gl.CULL_FACE);
-    // gl.frontFace(gl.BACK);
 
     gl.enable(gl.DEPTH_TEST);
 
     instanceMatrix = mat4();
 
     projectionMatrix = ortho(-20.0, 20.0, -20.0, 20.0, -20.0, 20.0);
+    // projectionMatrix = ortho(-1, 1, -1, 1, -100, 100);
 
     modelViewMatrix = mat4();
 
@@ -504,11 +589,6 @@ window.onload = function init() {
         gl.getUniformLocation(program, "modelViewMatrix"),
         false,
         flatten(modelViewMatrix)
-    );
-    gl.uniformMatrix4fv(
-        gl.getUniformLocation(program, "projectionMatrix"),
-        false,
-        flatten(projectionMatrix)
     );
 
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
@@ -527,9 +607,41 @@ window.onload = function init() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
+    var mergedNormals = [...normalsArray, ...sphereNormalsArray];
+    var nBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(mergedNormals), gl.STATIC_DRAW );
+    
+    var vNormal = gl.getAttribLocation( program, "vNormal" );
+    gl.vertexAttribPointer( vNormal, 3, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vNormal );
+
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
+
+    thetaLoc = gl.getUniformLocation(program, "theta");
+
+    viewerPos = vec3(0.0, 0.0, -20.0 );
+    
+    var ambientProduct = mult(lightAmbient, materialAmbient);
+    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    var specularProduct = mult(lightSpecular, materialSpecular); 
+    
+    gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),
+       flatten(ambientProduct));
+    gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"),
+       flatten(diffuseProduct) );
+    gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), 
+       flatten(specularProduct) );	
+    gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), 
+       flatten(lightPosition) );
+       
+    gl.uniform1f(gl.getUniformLocation(program, 
+       "shininess"),materialShininess);
+    
+    gl.uniformMatrix4fv( gl.getUniformLocation(program, "projectionMatrix"),
+       false, flatten(projectionMatrix));
 
     // color buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
@@ -572,11 +684,11 @@ window.onload = function init() {
     gl.disable(gl.DEPTH_TEST);
 
     // Load and bind the texture
-    var texture = gl.createTexture();
+    var txture = gl.createTexture();
     var image = new Image();
     image.src = "./img/bg.jpg";
     image.onload = function () {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.bindTexture(gl.TEXTURE_2D, txture);
         gl.texImage2D(
             gl.TEXTURE_2D,
             0,
