@@ -127,8 +127,7 @@ function initSliders() {
     animationSpeedSlider.onchange = function () {
         animSpeedP.innerHTML = this.value;
 
-        animationKeyFrameDivider =
-            this.value * defaultAnimationKeyFrameMultiplier;
+        animationKeyFrameDivider = this.value * defaultAnimationKeyFrameMultiplier;
     };
 }
 
@@ -239,20 +238,9 @@ function addHoverEffectToButtons() {
     });
 }
 
-function initPreDefinedAnimationButtons() {
-    document.getElementById("run-swim-anim").addEventListener("click", () => {
-        console.log("me likes swimming");
-    });
-
-    document.getElementById("run-shy-anim").addEventListener("click", () => {
-        console.log("me shy octop");
-    });
-}
-
 function initButtons() {
     initLegButtonsAndAddEventListeners();
     initAnimationButtonsAndAddEventListeners();
-    initPreDefinedAnimationButtons();
 }
 
 function convertButtonIndexToThetaArrIndex(buttonIndex) {
