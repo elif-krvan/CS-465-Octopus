@@ -38,6 +38,14 @@ var numVertices = 24;
 var stack = [];
 var figure = [];
 var keyFrames = [];
+var keyFramesPX = [];
+var keyFramesPY = [];
+var keyFramesBX = [];
+var keyFramesBY = [];
+var singlePupilXKeyFrames = [];
+var singlePupilYKeyFrames = [];
+var singleBodyXKeyFrames = [];
+var singleBodyYKeyFrames = [];
 var singleKeyFrames = [];
 var animationSpeed = 2;
 var animationKeyFrameDivider = 6;
@@ -182,12 +190,21 @@ function handleAnimate() {
     const animate = () => {
         if (currentKeyFrameIndex >= keyFrames.length) {
             clearInterval(animationInterval);
-            keyFrames = []
+            keyFrames = [];
+            keyFramesPX = [];
+            keyFramesPY = [];
+            keyFramesBX = [];
+            keyFramesBY = [];
             currentKeyFrameIndex = 0;
             return;
         }
 
         theta = keyFrames[currentKeyFrameIndex];
+        pupilsMoveX = keyFramesPX[currentKeyFrameIndex][0];
+        pupilsMoveY = keyFramesPY[currentKeyFrameIndex][0];
+        moveX = keyFramesBX[currentKeyFrameIndex][0];
+        moveY = keyFramesBY[currentKeyFrameIndex][0];
+
         currentKeyFrameIndex++;
         for (i = 0; i < theta.length; i++) initNodes(i);
     };
@@ -197,11 +214,33 @@ function handleAnimate() {
 
 function handleClearKeyframes() {
     keyFrames = [];
+    keyFramesPX = [];
+    keyFramesPY = [];
+    keyFramesBX = [];
+    keyFramesBY = [];
+    singlePupilXKeyFrames = [];
+    singlePupilYKeyFrames = [];
+    singleBodyXKeyFrames = [];
+    singleBodyYKeyFrames = [];
     singleKeyFrames = [];
 }
 
 function handleSingleKeyFrameSave() {
     singleKeyFrames.push(theta.slice());
+    singlePupilXKeyFrames.push(createRepeatingArray(pupilsMoveX, theta.slice().length));
+    singlePupilYKeyFrames.push(createRepeatingArray(pupilsMoveY, theta.slice().length));
+    singleBodyXKeyFrames.push(createRepeatingArray(moveX, theta.slice().length));
+    singleBodyYKeyFrames.push(createRepeatingArray(moveY, theta.slice().length));
+}
+
+function createRepeatingArray(item, repeatTimes) {
+    var result = [];
+
+    for (var i = 0; i < repeatTimes; i++) {
+        result.push(item);
+    }
+
+    return result;
 }
 
 function handleKeyFramesInterpolation() {
@@ -210,42 +249,98 @@ function handleKeyFramesInterpolation() {
         return;
     }
     
+    console.log("STARTING INTERPOLATION");
+
     for (var curSingleKeyFrame = 0; curSingleKeyFrame < singleKeyFrames.length - 1; curSingleKeyFrame++) {
+        // vars for theta
         var lastKeyFrame = singleKeyFrames[curSingleKeyFrame];
         var currentKeyFrame = singleKeyFrames[curSingleKeyFrame + 1];
+
+        // vars for pupilX
+        var lastKeyFramePX = singlePupilXKeyFrames[curSingleKeyFrame];
+        var currentKeyFramePX = singlePupilXKeyFrames[curSingleKeyFrame + 1];
+
+        // vars for pupilY
+        var lastKeyFramePY = singlePupilYKeyFrames[curSingleKeyFrame];
+        var currentKeyFramePY = singlePupilYKeyFrames[curSingleKeyFrame + 1];
+
+        // vars for bodyX
+        var lastKeyFrameBX = singleBodyXKeyFrames[curSingleKeyFrame];
+        var currentKeyFrameBX = singleBodyXKeyFrames[curSingleKeyFrame + 1];
+
+        // vars for bodyY
+        var lastKeyFrameBY = singleBodyYKeyFrames[curSingleKeyFrame];
+        var currentKeyFrameBY = singleBodyYKeyFrames[curSingleKeyFrame + 1];
 
         // If keyFrames is not empty
         // Store a new keyFrame for each angle of difference between new keyframe
         // Calculate difference
         var difference = [];
+        var differencePX = [];
+        var differencePY = [];
+        var differenceBX = [];
+        var differenceBY = [];
         for (var i = 0; i < lastKeyFrame.length; i++) {
             difference.push(lastKeyFrame[i] - currentKeyFrame[i]);
+            differencePX.push(lastKeyFramePX[i] - currentKeyFramePX[i]);
+            differencePY.push(lastKeyFramePY[i] - currentKeyFramePY[i]);
+            differenceBX.push(lastKeyFrameBX[i] - currentKeyFrameBX[i]);
+            differenceBY.push(lastKeyFrameBY[i] - currentKeyFrameBY[i]);
         }
 
         var maxDifferenceInTheta = findAbsoluteMaximumInArray(difference);
+        var maxDifferenceInThetaPX = findAbsoluteMaximumInArray(differencePX);
+        var maxDifferenceInThetaPY = findAbsoluteMaximumInArray(differencePY);
+        var maxDifferenceInThetaBX = findAbsoluteMaximumInArray(differenceBX);
+        var maxDifferenceInThetaBY = findAbsoluteMaximumInArray(differenceBY);
 
         if (maxDifferenceInTheta === 0) {
             console.log("ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?");
             return;
         }
 
-        maxDifferenceInTheta = Math.ceil(
-            maxDifferenceInTheta / animationKeyFrameDivider
-        );
+        maxDifferenceInTheta = Math.ceil(maxDifferenceInTheta / animationKeyFrameDivider);
+        maxDifferenceInThetaPX = Math.ceil(maxDifferenceInThetaPX / animationKeyFrameDivider);
+        maxDifferenceInThetaPY = Math.ceil(maxDifferenceInThetaPY / animationKeyFrameDivider);
+        maxDifferenceInThetaBX = Math.ceil(maxDifferenceInThetaBX / animationKeyFrameDivider);
+        maxDifferenceInThetaBY = Math.ceil(maxDifferenceInThetaBY / animationKeyFrameDivider);
 
         // Normalize the differences
         for (var i = 0; i < difference.length; i++) {
             difference[i] = difference[i] / maxDifferenceInTheta;
+            differencePX[i] = differencePX[i] / maxDifferenceInThetaPX;
+            differencePY[i] = differencePY[i] / maxDifferenceInThetaPY;
+            differenceBX[i] = differenceBX[i] / maxDifferenceInThetaBX;
+            differenceBY[i] = differenceBY[i] / maxDifferenceInThetaBY;
         }
 
         // Smoothly place keyFrames between each difference in angle
-        for (var j = 0; j < maxDifferenceInTheta; j++) {
-            lastKeyFrame = lastKeyFrame.map(
-                (num, index) => num - difference[index]
-            );
+        var maxDif = Math.max(
+            maxDifferenceInTheta,
+            maxDifferenceInThetaPX,
+            maxDifferenceInThetaPY,
+            maxDifferenceInThetaBX,
+            maxDifferenceInThetaBY
+        );
+
+        // if (maxDif != maxDifferenceInTheta) maxDif *= 2;
+
+        for (
+        var j = 0; j < maxDif; j++) {
+            lastKeyFrame = lastKeyFrame.map((num, index) => num - difference[index]);
+            lastKeyFramePX = lastKeyFramePX.map((num, index) => num - differencePX[index]);
+            lastKeyFramePY = lastKeyFramePY.map((num, index) => num - differencePY[index]);
+            lastKeyFrameBX = lastKeyFrameBX.map((num, index) => num - differenceBX[index]);
+            lastKeyFrameBY = lastKeyFrameBY.map((num, index) => num - differenceBY[index]);
             keyFrames.push(lastKeyFrame);
+            keyFramesPX.push(lastKeyFramePX);
+            keyFramesPY.push(lastKeyFramePY);
+            keyFramesBX.push(lastKeyFrameBX);
+            keyFramesBY.push(lastKeyFrameBY);
         }
     }
+
+    console.log("INTERPOLATION COMPLETE");
 }
 
 function findAbsoluteMaximumInArray(array) {
