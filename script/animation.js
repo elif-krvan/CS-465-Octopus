@@ -86,7 +86,6 @@ for (var i = 0; i < numNodes; i++)
 var vBuffer;
 var cBuffer;
 var bgBuffer;
-var indexBuffer;
 
 var eyeBuffer;
 var eyeColorBuffer;
@@ -107,7 +106,6 @@ var eyeColorsArray = [];
 var pupilColorsArray = [];
 
 var sphereArray = [];
-var sphereIndexArray = [];
 
 //-------------------------------------------
 
@@ -182,22 +180,6 @@ function sphere() {
             octopusHeadColorsArray.push(octopusColor);
             eyeColorsArray.push(eyeColor);
             pupilColorsArray.push(pupilColor);
-        }
-    }
-
-    for (var lat = 0; lat < latitudeBands; ++lat) {
-        for (var lon = 0; lon < longitudeBands; ++lon) {
-            var vA = lat * (longitudeBands + 1) + lon;
-            var vB = vA + (latitudeBands + 1);
-            var vC = vA + 1;
-            var vD = vB + 1;
-
-            sphereIndexArray.push(vA);
-            sphereIndexArray.push(vB);
-            sphereIndexArray.push(vC);
-            sphereIndexArray.push(vB);
-            sphereIndexArray.push(vD);
-            sphereIndexArray.push(vC);
         }
     }
 }
@@ -629,7 +611,6 @@ window.onload = function init() {
     cube();
     sphere();
 
-    indexBuffer = gl.createBuffer();
     vBuffer = gl.createBuffer();
     cBuffer = gl.createBuffer();
     bgBuffer = gl.createBuffer();
@@ -687,13 +668,6 @@ window.onload = function init() {
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(
-        gl.ELEMENT_ARRAY_BUFFER,
-        flatten(sphereIndexArray),
-        gl.STATIC_DRAW
-    );
 
     // eye buffer set up
     gl.bindBuffer(gl.ARRAY_BUFFER, eyeBuffer);
