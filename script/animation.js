@@ -403,6 +403,22 @@ function loadFile(file) {
     }
 }
 
+function setShyAnimation() {
+    const absolutePath = '../shy.octop';
+
+    fetch(absolutePath)
+        .then(response => response.json())
+        .then(jsonData => {
+            // Now you can use jsonData as needed
+            console.log(jsonData);
+
+            // The rest of your code for handling the parsed data goes here
+        })
+        .catch(error => {
+            console.error('Error fetching or parsing JSON:', error);
+        });
+}
+
 function createSaveData() {
     var data = {
         singlePupilXKeyFrames: singlePupilXKeyFrames,
