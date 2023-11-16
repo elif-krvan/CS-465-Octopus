@@ -231,6 +231,7 @@ function handleAnimate() {
 
     var currentKeyFrameIndex = 0;
     handleKeyFramesInterpolation();
+    disableAnimInputs();
 
     const animate = () => {
         if (currentKeyFrameIndex >= keyFrames.length) {
@@ -241,6 +242,8 @@ function handleAnimate() {
             keyFramesBX = [];
             keyFramesBY = [];
             currentKeyFrameIndex = 0;
+            enableAnimInputs();
+            console.log("Finished animating.");
             return;
         }
 
@@ -502,6 +505,36 @@ function createSaveData() {
     };
 
     return data;
+}
+
+function disableAnimInputs() {
+    console.log("Disabling inputs...");
+    document.getElementById("save-kf").disabled = true;
+    document.getElementById("clear-kf-list").disabled = true;
+    document.getElementById("run-anim").disabled = true;
+    document.getElementById("save-anim").disabled = true;
+    document.getElementById("load-anim").disabled = true;
+    document.getElementById("octop-input").disabled = true;
+    document.getElementById("slider-anim-speed").disabled = true;
+    document.getElementById("run-swim-anim").disabled = true;
+    document.getElementById("run-shy-anim").disabled = true;
+    document.getElementById("run-anger-anim").disabled = true;
+    console.log("Inputs disable complete...");
+}
+
+function enableAnimInputs() {
+    console.log("Enabling inputs...");
+    document.getElementById("save-kf").disabled = false;
+    document.getElementById("clear-kf-list").disabled = false;
+    document.getElementById("run-anim").disabled = false;
+    document.getElementById("save-anim").disabled = false;
+    document.getElementById("load-anim").disabled = false;
+    document.getElementById("octop-input").disabled = false;
+    document.getElementById("slider-anim-speed").disabled = false;
+    document.getElementById("run-swim-anim").disabled = false;
+    document.getElementById("run-shy-anim").disabled = false;
+    document.getElementById("run-anger-anim").disabled = false;
+    console.log("Inputs enable complete...");
 }
 
 function handleSaveAnimation() {

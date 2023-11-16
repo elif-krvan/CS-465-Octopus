@@ -125,6 +125,8 @@ function initSliders() {
 
     animationSpeedSlider = document.getElementById("slider-anim-speed");
     animationSpeedSlider.onchange = function () {
+        if (this.disabled) return;
+        
         animSpeedP.innerHTML = this.value;
 
         animationKeyFrameDivider =
@@ -151,23 +153,31 @@ function initSliderText() {
 
 function initAnimationButtonsAndAddEventListeners() {
     document.getElementById("save-kf").addEventListener("click", () => {
+        if (this.disabled) return;
+        
         console.log("Starting keyframe save...");
         handleSingleKeyFrameSave();
         console.log("Keyframe saved.");
     });
 
     document.getElementById("clear-kf-list").addEventListener("click", () => {
+        if (this.disabled) return;
+        
         console.log("Starting keyframe clear...");
         handleClearKeyframes();
         console.log("Keyframes cleared.");
     });
 
     document.getElementById("run-anim").addEventListener("click", () => {
+        if (this.disabled) return;
+        
         console.log("Starting animation...");
         handleAnimate();
     });
 
     document.getElementById("save-anim").addEventListener("click", () => {
+        if (this.disabled) return;
+        
         console.log("Saving animation...");
         handleSaveAnimation();
         console.log("Animation saved.");
@@ -175,6 +185,8 @@ function initAnimationButtonsAndAddEventListeners() {
 
     // event listener for the button that clicks the file input
     document.getElementById("load-anim").addEventListener("click", () => {
+        if (this.disabled) return;
+        
         document.getElementById("octop-input").click();
     });
 
@@ -182,6 +194,8 @@ function initAnimationButtonsAndAddEventListeners() {
     document
         .getElementById("octop-input")
         .addEventListener("change", function () {
+            if (this.disabled) return;
+        
             var selectedFile = this.files[0];
             loadFile(selectedFile);
 
@@ -241,15 +255,15 @@ function addHoverEffectToButtons() {
 
 function initPreDefinedAnimationButtons() {
     document.getElementById("run-swim-anim").addEventListener("click", () => {
-        setPresetAnimation("../swim.octop");
+        if (!this.disabled) setPresetAnimation("../swim.octop");
     });
 
     document.getElementById("run-shy-anim").addEventListener("click", () => {
-        setPresetAnimation("../shy.octop");
+        if (!this.disabled) setPresetAnimation("../shy.octop");
     });
 
     document.getElementById("run-anger-anim").addEventListener("click", () => {
-        setPresetAnimation("../fighter.octop");
+        if (!this.disabled) setPresetAnimation("../fighter.octop");
     });
 }
 
