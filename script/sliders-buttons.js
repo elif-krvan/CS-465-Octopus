@@ -241,11 +241,11 @@ function addHoverEffectToButtons() {
 
 function initPreDefinedAnimationButtons() {
     document.getElementById("run-swim-anim").addEventListener("click", () => {
-        console.log("me likes swimming");
+        setPresetAnimation("../swim.octop");
     });
 
     document.getElementById("run-shy-anim").addEventListener("click", () => {
-        console.log("me shy octop");
+        setPresetAnimation("../shy.octop");
     });
 }
 
