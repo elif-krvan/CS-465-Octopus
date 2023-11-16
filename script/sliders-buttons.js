@@ -249,7 +249,7 @@ function initPreDefinedAnimationButtons() {
     });
 
     document.getElementById("run-anger-anim").addEventListener("click", () => {
-        setPresetAnimation("../anger.octop");
+        setPresetAnimation("../fighter.octop");
     });
 }
 
