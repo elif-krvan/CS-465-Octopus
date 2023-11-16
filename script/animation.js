@@ -38,6 +38,7 @@ var numVertices = 24;
 var stack = [];
 var figure = [];
 var keyFrames = [];
+var singleKeyFrames = [];
 var animationSpeed = 2;
 var animationKeyFrameDivider = 6;
 
@@ -170,42 +171,51 @@ function setColorArrayForDrawing(colorArray) {
 }
 
 function handleAnimate() {
-    if (keyFrames.length === 0) {
+    if (singleKeyFrames.length === 0) {
         console.log("ERROR: No animation keyframe is saved to animate.");
         return;
     }
 
     var currentKeyFrameIndex = 0;
+    handleKeyFramesInterpolation();
 
     const animate = () => {
         if (currentKeyFrameIndex >= keyFrames.length) {
             clearInterval(animationInterval);
+            keyFrames = []
             currentKeyFrameIndex = 0;
             return;
         }
 
         theta = keyFrames[currentKeyFrameIndex];
         currentKeyFrameIndex++;
-        for (i = 0; i < numNodes; i++) initNodes(i);
+        for (i = 0; i < theta.length; i++) initNodes(i);
     };
 
     var animationInterval = setInterval(animate, animationSpeed);
 }
 
 function handleClearKeyframes() {
-    if (keyFrames.length !== 0) {
-        // If keyFrames is not empty
-        keyFrames = [];
-    }
+    keyFrames = [];
+    singleKeyFrames = [];
 }
 
-function handleSaveKeyframe() {
-    if (keyFrames.length !== 0) {
+function handleSingleKeyFrameSave() {
+    singleKeyFrames.push(theta.slice());
+}
+
+function handleKeyFramesInterpolation() {
+    if (singleKeyFrames.length <= 1) {
+        console.log("ERROR: You need more keyframes to animate.");
+        return;
+    }
+    
+    for (var curSingleKeyFrame = 0; curSingleKeyFrame < singleKeyFrames.length - 1; curSingleKeyFrame++) {
+        var lastKeyFrame = singleKeyFrames[curSingleKeyFrame];
+        var currentKeyFrame = singleKeyFrames[curSingleKeyFrame + 1];
+
         // If keyFrames is not empty
         // Store a new keyFrame for each angle of difference between new keyframe
-        var currentKeyFrame = theta.slice();
-        var lastKeyFrame = keyFrames.slice(keyFrames.length - 1)[0];
-
         // Calculate difference
         var difference = [];
         for (var i = 0; i < lastKeyFrame.length; i++) {
@@ -215,9 +225,7 @@ function handleSaveKeyframe() {
         var maxDifferenceInTheta = findAbsoluteMaximumInArray(difference);
 
         if (maxDifferenceInTheta === 0) {
-            console.log(
-                "ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?"
-            );
+            console.log("ERROR: Max difference of theta is 0. Perhaps you tried to save the same keyframe?");
             return;
         }
 
@@ -237,9 +245,6 @@ function handleSaveKeyframe() {
             );
             keyFrames.push(lastKeyFrame);
         }
-    } else {
-        // else if keyFrames is empty
-        keyFrames.push(theta.slice());
     }
 }
 

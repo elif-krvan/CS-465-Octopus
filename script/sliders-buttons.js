@@ -35,6 +35,7 @@ var pupilYP;
 var moveXP;
 var moveYP;
 var animSpeedP;
+var defaultAnimationKeyFrameMultiplier = 3;
 
 const armOffsetForButtonArray = 5;
 
@@ -126,7 +127,7 @@ function initSliders() {
     animationSpeedSlider.onchange = function () {
         animSpeedP.innerHTML = this.value;
 
-        animationSpeed = this.value;
+        animationKeyFrameDivider = this.value * defaultAnimationKeyFrameMultiplier;
     };
 }
 
@@ -150,7 +151,7 @@ function initSliderText() {
 function initAnimationButtonsAndAddEventListeners() {
     document.getElementById("save-kf").addEventListener("click", () => {
         console.log("Starting keyframe save...");
-        handleSaveKeyframe();
+        handleSingleKeyFrameSave();
         console.log("Keyframe saved.");
     });
 
