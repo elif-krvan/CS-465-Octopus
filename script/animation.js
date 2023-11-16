@@ -358,7 +358,6 @@ function findAbsoluteMinimumInArray(array) {
 
 function loadFile(file) {
     if (file) {
-        console.log("me likes reading file");
         var reader = new FileReader();
 
         // Callback function to run after the file is read
@@ -370,8 +369,30 @@ function loadFile(file) {
                 var jsonData = JSON.parse(jsonContent);
 
                 // set data
+                handleClearKeyframes();
+                singlePupilXKeyFrames = jsonData.singlePupilXKeyFrames;
+                singlePupilYKeyFrames = jsonData.singlePupilYKeyFrames;
+                singleBodyXKeyFrames = jsonData.singleBodyXKeyFrames;
+                singleBodyYKeyFrames = jsonData.singleBodyYKeyFrames;
+                singleKeyFrames = jsonData.singleKeyFrames;
+                theta = theta;
+                keyFrames = keyFrames;
+                keyFramesPX = keyFramesPX;
+                keyFramesPY = keyFramesPY;
+                keyFramesBX = keyFramesBX;
+                keyFramesBY = keyFramesBY;
+                moveX = moveX;
+                moveY = moveY;
+                pupilsMoveX = pupilsMoveX;
+                pupilsMoveY = pupilsMoveY;
 
-                render();
+                for (var i = 0; i < numNodes; i++) {
+                    figure[i] = createNode(null, null, null, null);
+                } 
+
+                for (i = 0; i < theta.length; i++) {
+                    initNodes(i);
+                }
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }
@@ -379,8 +400,57 @@ function loadFile(file) {
 
         // Read the file
         reader.readAsText(file);
-        render();
     }
+}
+
+function createSaveData() {
+    var data = {
+        singlePupilXKeyFrames: singlePupilXKeyFrames,
+        singlePupilYKeyFrames: singlePupilYKeyFrames,
+        singleBodyXKeyFrames: singleBodyXKeyFrames,
+        singleBodyYKeyFrames: singleBodyYKeyFrames,
+        singleKeyFrames: singleKeyFrames,
+        theta: theta,
+        keyFrames: keyFrames,
+        keyFramesPX: keyFramesPX,
+        keyFramesPY: keyFramesPY,
+        keyFramesBX: keyFramesBX,
+        keyFramesBY: keyFramesBY,
+        moveX: moveX,
+        moveY: moveY,
+        pupilsMoveX: pupilsMoveX,
+        pupilsMoveY: pupilsMoveY
+    };
+
+    return data;
+}
+
+function handleSaveAnimation() {
+    createAndDownloadJSONFile();
+}
+
+function createAndDownloadJSONFile() {
+    var jsonData = createSaveData();
+
+    // Convert the object to a JSON string          // number of spaces before json values
+    var jsonContent = JSON.stringify(jsonData, null, 2);
+    var blob = new Blob([jsonContent], { type: 'application/json' });
+
+    // Create a URL for the Blob
+    var url = window.URL.createObjectURL(blob);
+
+    // Create an anchor element to trigger the download
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = "animation.octop"; // Set the desired file name
+    document.body.appendChild(a);
+
+    // Click the anchor to start the download
+    a.click();
+
+    // Clean up
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
 }
 
 window.onload = function init() {

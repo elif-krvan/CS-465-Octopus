@@ -167,9 +167,9 @@ function initAnimationButtonsAndAddEventListeners() {
     });
 
     document.getElementById("save-anim").addEventListener("click", () => {
-        console.log("-----------");
-        console.log(keyFrames);
-        console.log("-----------");
+        console.log("Saving animation...");
+        handleSaveAnimation();
+        console.log("Animation saved.");
     });
 
     // event listener for the button that clicks the file input

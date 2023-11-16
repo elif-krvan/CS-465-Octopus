@@ -15,8 +15,8 @@ function setUpperArmProperties(armSequenceId, armId, middleArmId, armFcn) {
     var translateX = legCircleRadius * Math.cos(armAngle);
     var translateZ = legCircleRadius * Math.sin(armAngle);
 
-    console.log("x:", translateX);
-    console.log("z:", translateZ);
+    // console.log("x:", translateX);
+    // console.log("z:", translateZ);
 
     var rotatePointY = torsoHeight / 2;
 
